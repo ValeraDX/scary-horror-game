@@ -1,0 +1,69 @@
+[gd_scene load_steps=20 format=3 uid="uid://b4h8d4eln1vke"]
+
+[ext_resource type="ArrayMesh" uid="uid://e23ewv3rk27f" path="res://objects/table de killer/model/POOL TABLE.obj" id="1_2eyek"]
+[ext_resource type="Script" uid="uid://c2mty118yooob" path="res://objects/table de killer/scarymonter.gd" id="1_avqjq"]
+[ext_resource type="Texture2D" uid="uid://dcx6emjxnqj0p" path="res://objects/pool table low_POOL TABLE_Normal.png" id="2_avqjq"]
+[ext_resource type="Texture2D" uid="uid://bor8exkg675ry" path="res://objects/table de killer/model/pool table low_POOL TABLE_Metallic.png" id="3_d0tmg"]
+[ext_resource type="Texture2D" uid="uid://7p8e2gga8uyo" path="res://objects/table de killer/model/pool table low_POOL TABLE_BaseColor.png" id="4_yb57g"]
+[ext_resource type="Texture2D" uid="uid://cnph7gsq63edh" path="res://objects/table de killer/model/internal_ground_ao_texture.jpeg" id="5_4on5x"]
+[ext_resource type="Texture2D" uid="uid://culef1aq84aqu" path="res://objects/table de killer/model/pool table low_POOL TABLE_Roughness.png" id="6_remwt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2dr8q"]
+albedo_texture = ExtResource("2_avqjq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fyyl4"]
+albedo_texture = ExtResource("3_d0tmg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aq707"]
+albedo_texture = ExtResource("3_d0tmg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_35u7g"]
+albedo_color = Color(0, 1, 1, 1)
+albedo_texture = ExtResource("3_d0tmg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wjqid"]
+albedo_texture = ExtResource("4_yb57g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tebs7"]
+albedo_texture = ExtResource("4_yb57g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u0un1"]
+albedo_texture = ExtResource("4_yb57g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvm6t"]
+albedo_texture = ExtResource("4_yb57g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7hf4p"]
+albedo_texture = ExtResource("4_yb57g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hc60n"]
+albedo_texture = ExtResource("5_4on5x")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hugsw"]
+albedo_texture = ExtResource("4_yb57g")
+metallic = 1.0
+metallic_texture = ExtResource("6_remwt")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a2tvv"]
+size = Vector3(2.02, 1, 1)
+
+[node name="scarymonter" type="CharacterBody3D"]
+script = ExtResource("1_avqjq")
+
+[node name="PoolTable" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0361598, -0.514168, 0)
+mesh = ExtResource("1_2eyek")
+surface_material_override/0 = SubResource("StandardMaterial3D_2dr8q")
+surface_material_override/1 = SubResource("StandardMaterial3D_fyyl4")
+surface_material_override/2 = SubResource("StandardMaterial3D_aq707")
+surface_material_override/3 = SubResource("StandardMaterial3D_35u7g")
+surface_material_override/4 = SubResource("StandardMaterial3D_wjqid")
+surface_material_override/5 = SubResource("StandardMaterial3D_tebs7")
+surface_material_override/6 = SubResource("StandardMaterial3D_u0un1")
+surface_material_override/7 = SubResource("StandardMaterial3D_dvm6t")
+surface_material_override/8 = SubResource("StandardMaterial3D_7hf4p")
+surface_material_override/9 = SubResource("StandardMaterial3D_hc60n")
+surface_material_override/10 = SubResource("StandardMaterial3D_hugsw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_a2tvv")

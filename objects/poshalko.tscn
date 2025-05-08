@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4bvrujie24ek"]
+
+[ext_resource type="Texture2D" uid="uid://84bdjsj8kkf2" path="res://textures/6eggs.png" id="1_qy4ns"]
+[ext_resource type="Script" uid="uid://d2txhbhivbw7e" path="res://objects/poshalko.gd" id="1_riimt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_riimt"]
+size = Vector3(6.7666, 2.45508, 5.44897)
+
+[node name="poshalko" type="Node3D"]
+script = ExtResource("1_riimt")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00708818, 0)
+shape = SubResource("BoxShape3D_riimt")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 1
+texture = ExtResource("1_qy4ns")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

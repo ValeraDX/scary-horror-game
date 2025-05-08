@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://mhivk8ur8ro4"
+path="res://.godot/imported/Sonic Rush E3 Beta  Title.ogg-a1af5673dca51fe3403d460335d51349.oggvorbisstr"
+
+[deps]
+
+source_file="res://sfx/Sonic Rush E3 Beta  Title.ogg"
+dest_files=["res://.godot/imported/Sonic Rush E3 Beta  Title.ogg-a1af5673dca51fe3403d460335d51349.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=1.3
+bpm=120.0
+beat_count=111
+bar_beats=4
