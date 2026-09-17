@@ -12,9 +12,10 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	gamepadinput = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
+	gamepadinput = %left_hand.get_vector2("primary")
 	rotation.y -= gamepadinput.x * delta * 3.5
-	$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x += gamepadinput.y * delta * 3.5
-	$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
+	#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x += gamepadinput.y * delta * 3.5
+	#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
 	if position.y < -5:
 		posh = 0
 		get_tree().reload_current_scene()
@@ -29,7 +30,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 
-	var input_dir := Input.get_vector("left", "right", "up", "down")
+	var input_dir :Vector2= %left_hand.get_vector2("primary")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction and posh < 6:
 		$AnimationPlayer.play("walk", -1, 1.3)
@@ -58,12 +59,12 @@ func _input(event):
 		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
 	if event is InputEventMouseMotion and Gameplatform.mobile == false:
 		rotation.y -= event.relative.x / mouseSensitivity
-		$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x -= event.relative.y / mouseSensitivity
-		$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
+		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x -= event.relative.y / mouseSensitivity
+		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
 	if event is InputEventScreenDrag and Gameplatform.mobile == true:
 		rotate_y(deg_to_rad(-event.relative.x / mouseSensitivity * 32))
-		$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x -= event.relative.y / mouseSensitivity
-		$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
+		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x -= event.relative.y / mouseSensitivity
+		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
 
 func generickill() -> void:
 	$Aaaaaaaaaaaaaa.play()

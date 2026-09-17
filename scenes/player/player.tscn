@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d1khig4acxcvl" path="res://scenes/player/player.gd" id="1_8afob"]
 [ext_resource type="Animation" uid="uid://501ordqc4kd5" path="res://scenes/player/model/anims/basic/backflip.res" id="2_0owmy"]
 [ext_resource type="Texture2D" uid="uid://tepk2cenug6b" path="res://scenes/player/texture.png" id="2_dovo2"]
+[ext_resource type="Script" uid="uid://b2x0y1vxtgo3r" path="res://scenes/player/xr_origin_3d.gd" id="2_ugbui"]
 [ext_resource type="Animation" uid="uid://boajolufrt6ow" path="res://scenes/player/model/anims/basic/fall_b_loop.res" id="3_qek5x"]
 [ext_resource type="Animation" uid="uid://cefvay0qxo75b" path="res://scenes/player/model/anims/basic/injured_fall.res" id="4_5gtgg"]
 [ext_resource type="Animation" uid="uid://c1s3yn7ikf0qw" path="res://scenes/player/model/anims/basic/injured_run_land.res" id="5_h17s1"]
@@ -342,8 +343,18 @@ _data = {
 collision_mask = 7
 script = ExtResource("1_8afob")
 
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=1035190460]
+script = ExtResource("2_ugbui")
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=8143898]
+transform = Transform3D(-0.99586785, -0.057306677, 0.07045056, -0.08073056, 0.20334893, -0.97577244, 0.04159223, -0.9774279, -0.20713504, -0.09153716, 0.39020282, -0.82291114)
+current = true
+
+[node name="left_hand" type="XRController3D" parent="XROrigin3D" unique_id=1960726257]
+unique_name_in_owner = true
+tracker = &"left_hand"
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1134227652]
-visible = false
 shape = SubResource("CapsuleShape3D_3vyb7")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=368604997]
@@ -558,13 +569,6 @@ bone_idx = 5
 [node name="Head" type="Node3D" parent="Skeleton/BoneAttachment3D" unique_id=1431905547]
 transform = Transform3D(1, 2.21189e-08, -3.72529e-09, -4.65661e-10, 1, -2.98023e-08, -4.65661e-09, 2.98023e-08, 1, 1.42569, 10.3182, 13.1156)
 
-[node name="Camera3D" type="Camera3D" parent="Skeleton/BoneAttachment3D/Head" unique_id=664378212]
-transform = Transform3D(-40, -1.10269e-06, -4.88758e-06, -8.9407e-08, 39.9881, -0.977289, 4.41074e-06, -0.977288, -39.988, -0.197793, -5.43224, -1.97926)
-visible = false
-doppler_tracking = 2
-
-[node name="XRCamera3D" type="XRCamera3D" parent="Skeleton/BoneAttachment3D/Head" unique_id=8143898]
-
 [node name="FatGuy" type="MeshInstance3D" parent="Skeleton" unique_id=1496194210]
 mesh = SubResource("ArrayMesh_ugbui")
 skin = SubResource("Skin_fcs02")
@@ -613,5 +617,3 @@ color = Color(1, 0, 0, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer" unique_id=1721336315]
 libraries/ = SubResource("AnimationLibrary_h17s1")
-
-[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=1035190460]
