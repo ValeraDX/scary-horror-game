@@ -9,7 +9,7 @@ env:
 
 jobs:
   export-windows-32:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: barichello/godot-ci:4.7.2
     steps:
@@ -20,8 +20,6 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
-          mkdir -p /tmp/blender-home
-          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -47,7 +45,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Windows 32 Bit" "build/win32/scary horror-win32.exe"
 
       - name: Verify
@@ -61,7 +59,7 @@ jobs:
           path: build/win32/scary horror-win32.exe
 
   export-windows-64:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: barichello/godot-ci:4.7.2
     steps:
@@ -72,8 +70,6 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
-          mkdir -p /tmp/blender-home
-          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -99,7 +95,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Windows 64 Bit" "build/win64/scary horror-win64.exe"
 
       - name: Verify
@@ -113,7 +109,7 @@ jobs:
           path: build/win64/scary horror-win64.exe
 
   export-linux-32:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: barichello/godot-ci:4.7.2
     steps:
@@ -124,8 +120,6 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
-          mkdir -p /tmp/blender-home
-          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -151,7 +145,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Linux 32 Bit" "build/linux32/super scary-linux32"
 
       - name: Verify
@@ -165,7 +159,7 @@ jobs:
           path: build/linux32/super scary-linux32
 
   export-linux-64:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: barichello/godot-ci:4.7.2
     steps:
@@ -176,8 +170,6 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
-          mkdir -p /tmp/blender-home
-          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -203,7 +195,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Linux 64 Bit" "build/linux64/scary horror-linux"
 
       - name: Verify
@@ -217,7 +209,7 @@ jobs:
           path: build/linux64/scary horror-linux
 
   export-mac:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: barichello/godot-ci:4.7.2
     steps:
@@ -228,8 +220,6 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
-          mkdir -p /tmp/blender-home
-          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -255,7 +245,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "macOS" "build/mac/scary horror-mac.zip"
 
       - name: Verify
@@ -269,7 +259,7 @@ jobs:
           path: build/mac/scary horror-mac.zip
 
   export-android:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: barichello/godot-ci:4.7.2
     steps:
@@ -280,20 +270,8 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
-          mkdir -p /tmp/blender-home
-          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
-
-      - name: Configure Android SDK
-        run: |
-          yes | /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null || true
-          /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager \
-            "platform-tools" \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
-          test -d /usr/lib/android-sdk/platforms/android-34
-          test -d /usr/lib/android-sdk/build-tools/34.0.0
 
       - name: Configure Godot
         run: |
@@ -346,7 +324,7 @@ jobs:
           export/android/debug_keystore_pass = "android"
           export/android/force_system_user = false
           EOF
-          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-debug "Android" "build/android/scary horror-android.apk"
 
       - name: Verify
