@@ -25,6 +25,14 @@ jobs:
           mkdir -v -p ~/.config/
           mv /root/.config/godot ~/.config/godot
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          apt-get update
+          apt-get install -y --no-install-recommends xz-utils
+          wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
+          tar -xf blender-3.6.0-linux-x64.tar.xz
+          cd blender-3.6.0-linux-x64
+          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.tres
+          cd ..
+          godot -v -e --quit --headless
       - name: Windows Build
         run: |
           mkdir -v -p build/windows
@@ -51,6 +59,14 @@ jobs:
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          apt-get update
+          apt-get install -y --no-install-recommends xz-utils
+          wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
+          tar -xf blender-3.6.0-linux-x64.tar.xz
+          cd blender-3.6.0-linux-x64
+          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.tres
+          cd ..
+          godot -v -e --quit --headless
       - name: Linux Build
         run: |
           mkdir -v -p build/linux
@@ -77,6 +93,14 @@ jobs:
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          apt-get update
+          apt-get install -y --no-install-recommends xz-utils
+          wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
+          tar -xf blender-3.6.0-linux-x64.tar.xz
+          cd blender-3.6.0-linux-x64
+          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.tres
+          cd ..
+          godot -v -e --quit --headless
       - name: Mac Build
         run: |
           mkdir -v -p build/mac
