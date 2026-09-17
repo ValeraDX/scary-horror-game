@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 signal kill(cause)
+
 var SPEED = 250.0
 const JUMP_VELOCITY = 4.5
 @onready var player = get_parent().get_node("player")
