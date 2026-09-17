@@ -9,8 +9,6 @@ var gamepadinput : Vector2
 func _ready() -> void:
 	if Gameplatform.mobile == false:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		$CanvasLayer/Control/TouchScreenJoystick.queue_free()
-		$CanvasLayer/Control/TouchScreenButton.queue_free()
 
 func _physics_process(delta: float) -> void:
 	gamepadinput = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
@@ -48,9 +46,6 @@ func _physics_process(delta: float) -> void:
 		$SubViewportContainer.visible = true
 	if posh >= 6 and $Skeleton/SonicRushE3BetaTitle.playing == false:
 		$Skeleton/SonicRushE3BetaTitle.play()
-		if Gameplatform.mobile == true:
-			$CanvasLayer/Control/TouchScreenJoystick.queue_free()
-			$CanvasLayer/Control/TouchScreenButton/TouchScreenButton.queue_free()
 	move_and_slide()
 	
 
