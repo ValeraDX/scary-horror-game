@@ -20,6 +20,8 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
+          mkdir -p /tmp/blender-home
+          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -45,7 +47,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Windows 32 Bit" "build/win32/scary horror-win32.exe"
 
       - name: Verify
@@ -70,6 +72,8 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
+          mkdir -p /tmp/blender-home
+          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -95,7 +99,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Windows 64 Bit" "build/win64/scary horror-win64.exe"
 
       - name: Verify
@@ -120,6 +124,8 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
+          mkdir -p /tmp/blender-home
+          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -145,7 +151,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Linux 32 Bit" "build/linux32/super scary-linux32"
 
       - name: Verify
@@ -170,6 +176,8 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
+          mkdir -p /tmp/blender-home
+          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -195,7 +203,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "Linux 64 Bit" "build/linux64/scary horror-linux"
 
       - name: Verify
@@ -220,6 +228,8 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
+          mkdir -p /tmp/blender-home
+          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
 
@@ -245,7 +255,7 @@ jobs:
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-release "macOS" "build/mac/scary horror-mac.zip"
 
       - name: Verify
@@ -270,8 +280,20 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends blender
+          mkdir -p /tmp/blender-home
+          chmod 755 /tmp/blender-home
           blender --background --version
           test -x /usr/bin/blender
+
+      - name: Configure Android SDK
+        run: |
+          yes | /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null || true
+          /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
+          test -d /usr/lib/android-sdk/platforms/android-34
+          test -d /usr/lib/android-sdk/build-tools/34.0.0
 
       - name: Configure Godot
         run: |
@@ -297,10 +319,10 @@ jobs:
           test -d /usr/lib/android-sdk
           test -x /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager
           test -d /usr/lib/android-sdk/platform-tools
-          test -d /usr/lib/android-sdk/build-tools
-          test -d /usr/lib/android-sdk/platforms
-          test -d /usr/lib/android-sdk/ndk
+          test -d /usr/lib/android-sdk/platforms/android-34
+          test -d /usr/lib/android-sdk/build-tools/34.0.0
           test -d /usr/lib/jvm/java-17-openjdk-amd64
+          test -f /root/debug.keystore
           java -version
           /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager --version
 
@@ -324,7 +346,7 @@ jobs:
           export/android/debug_keystore_pass = "android"
           export/android/force_system_user = false
           EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+          HOME=/tmp/blender-home godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
             --export-debug "Android" "build/android/scary horror-android.apk"
 
       - name: Verify
