@@ -19,6 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Godot
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
+
       - name: Install Blender
         run: |
           apt-get update
@@ -64,6 +69,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Godot
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
 
       - name: Install Blender
         run: |
@@ -111,6 +121,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Godot
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
+
       - name: Install Blender
         run: |
           apt-get update
@@ -156,6 +171,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Godot
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
 
       - name: Install Blender
         run: |
@@ -203,6 +223,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Godot
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
+
       - name: Install Blender
         run: |
           apt-get update
@@ -245,26 +270,27 @@ jobs:
     container:
       image: barichello/godot-ci:4.7.2
 
-    env:
-      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-      ANDROID_HOME: /usr/lib/android-sdk
-      ANDROID_SDK_ROOT: /usr/lib/android-sdk
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Godot
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
+
+          mkdir -p "$HOME/.config/godot"
+          cp /root/.config/godot/editor_settings-4.7.tres "$HOME/.config/godot/editor_settings-4.7.tres"
+
       - name: Verify Android SDK
         run: |
-          echo "JAVA_HOME=$JAVA_HOME"
           echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           java -version
           sdkmanager --version
           test -d "$ANDROID_HOME"
           test -d "$ANDROID_HOME/platform-tools"
-          test -d "$ANDROID_HOME/build-tools"
-          test -d "$ANDROID_HOME/platforms"
+          test -d "$ANDROID_HOME/build-tools/33.0.2"
+          test -d "$ANDROID_HOME/platforms/android-33"
           test -d "$ANDROID_HOME/ndk"
 
       - name: Install Blender
