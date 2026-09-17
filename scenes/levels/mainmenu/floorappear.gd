@@ -1,4 +1,4 @@
 extends Timer
-@export var floor : Node
+@export var node_floor : Node
 func _on_timeout() -> void:
-	floor.visible = true
+	node_floor.visible = true

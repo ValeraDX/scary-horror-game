@@ -29,7 +29,7 @@ project/assembly_name="scary horror"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/MultiTouchGui/plugin.cfg", "res://addons/addons/MultiTouchGui/plugin.cfg", "res://addons/mixamo_animation_retargeter/plugin.cfg")
+enabled=PackedStringArray("res://addons/MultiTouchGui/plugin.cfg", "res://addons/mixamo_animation_retargeter/plugin.cfg")
 
 [global_group]
 
@@ -108,4 +108,5 @@ shader_compiler/shader_cache/strip_debug=true
 [xr]
 
 openxr/enabled=true
+openxr/startup_alert=false
 shaders/enabled=true
