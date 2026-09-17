@@ -9,12 +9,9 @@ env:
 
 jobs:
   export-windows-32:
-    name: Windows 32 Bit Export
     runs-on: ubuntu-24.04
-
     container:
       image: barichello/godot-ci:4.7.2
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,10 +27,8 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/godot"
           mkdir -p "$HOME/.local/share/godot/export_templates"
-
-          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
@@ -41,56 +36,32 @@ jobs:
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
 
-      - name: Import project
-        run: |
-          mkdir -p "$HOME/.config/godot"
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --import \
-            --audio-driver Dummy \
-            --verbose
-
-      - name: Windows 32 Bit Build
+      - name: Export
         run: |
           mkdir -p build/win32
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+            --export-release "Windows 32 Bit" "build/win32/scary horror-win32.exe"
 
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --verbose \
-            --audio-driver Dummy \
-            --export-release \
-            "Windows 32 Bit" \
-            "build/win32/scary horror-win32.exe"
+      - name: Verify
+        run: |
+          test -f "build/win32/scary horror-win32.exe"
 
-      - name: Upload Artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: windows-32-bit
-          path: build/win32
+          name: windows-32
+          path: build/win32/scary horror-win32.exe
 
   export-windows-64:
-    name: Windows 64 Bit Export
     runs-on: ubuntu-24.04
-
     container:
       image: barichello/godot-ci:4.7.2
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -106,10 +77,8 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/godot"
           mkdir -p "$HOME/.local/share/godot/export_templates"
-
-          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
@@ -117,55 +86,32 @@ jobs:
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
 
-      - name: Import project
-        run: |
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --import \
-            --audio-driver Dummy \
-            --verbose
-
-      - name: Windows 64 Bit Build
+      - name: Export
         run: |
           mkdir -p build/win64
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+            --export-release "Windows 64 Bit" "build/win64/scary horror-win64.exe"
 
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --verbose \
-            --audio-driver Dummy \
-            --export-release \
-            "Windows 64 Bit" \
-            "build/win64/scary horror-win64.exe"
+      - name: Verify
+        run: |
+          test -f "build/win64/scary horror-win64.exe"
 
-      - name: Upload Artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: windows-64-bit
-          path: build/win64
+          name: windows-64
+          path: build/win64/scary horror-win64.exe
 
   export-linux-32:
-    name: Linux 32 Bit Export
     runs-on: ubuntu-24.04
-
     container:
       image: barichello/godot-ci:4.7.2
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -181,10 +127,8 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/godot"
           mkdir -p "$HOME/.local/share/godot/export_templates"
-
-          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
@@ -192,55 +136,32 @@ jobs:
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
 
-      - name: Import project
-        run: |
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --import \
-            --audio-driver Dummy \
-            --verbose
-
-      - name: Linux 32 Bit Build
+      - name: Export
         run: |
           mkdir -p build/linux32
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+            --export-release "Linux 32 Bit" "build/linux32/super scary-linux32"
 
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --audio-driver Dummy \
-            --verbose \
-            --export-release \
-            "Linux 32 Bit" \
-            "build/linux32/super scary-linux32"
+      - name: Verify
+        run: |
+          test -f "build/linux32/super scary-linux32"
 
-      - name: Upload Artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: linux-32-bit
-          path: build/linux32
+          name: linux-32
+          path: build/linux32/super scary-linux32
 
   export-linux-64:
-    name: Linux 64 Bit Export
     runs-on: ubuntu-24.04
-
     container:
       image: barichello/godot-ci:4.7.2
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -256,10 +177,8 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/godot"
           mkdir -p "$HOME/.local/share/godot/export_templates"
-
-          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
@@ -267,55 +186,32 @@ jobs:
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
 
-      - name: Import project
-        run: |
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --import \
-            --audio-driver Dummy \
-            --verbose
-
-      - name: Linux 64 Bit Build
+      - name: Export
         run: |
           mkdir -p build/linux64
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+            --export-release "Linux 64 Bit" "build/linux64/scary horror-linux"
 
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --verbose \
-            --audio-driver Dummy \
-            --export-release \
-            "Linux 64 Bit" \
-            "build/linux64/scary horror-linux"
+      - name: Verify
+        run: |
+          test -f "build/linux64/scary horror-linux"
 
-      - name: Upload Artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: linux-64-bit
-          path: build/linux64
+          name: linux-64
+          path: build/linux64/scary horror-linux
 
   export-mac:
-    name: macOS Export
     runs-on: ubuntu-24.04
-
     container:
       image: barichello/godot-ci:4.7.2
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -331,10 +227,8 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/godot"
           mkdir -p "$HOME/.local/share/godot/export_templates"
-
-          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
@@ -342,55 +236,32 @@ jobs:
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
 
-      - name: Import project
-        run: |
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --import \
-            --audio-driver Dummy \
-            --verbose
-
-      - name: macOS Build
+      - name: Export
         run: |
           mkdir -p build/mac
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           EOF
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+            --export-release "macOS" "build/mac/scary horror-mac.zip"
 
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --verbose \
-            --audio-driver Dummy \
-            --export-release \
-            "macOS" \
-            "build/mac/scary horror-mac.zip"
+      - name: Verify
+        run: |
+          test -f "build/mac/scary horror-mac.zip"
 
-      - name: Upload Artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: macos
-          path: build/mac
+          path: build/mac/scary horror-mac.zip
 
   export-android:
-    name: Android Debug Export
     runs-on: ubuntu-24.04
-
     container:
       image: barichello/godot-ci:4.7.2
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -406,10 +277,8 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/godot"
           mkdir -p "$HOME/.local/share/godot/export_templates"
-
-          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
@@ -425,57 +294,24 @@ jobs:
 
       - name: Verify Android SDK
         run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
+          test -d /usr/lib/android-sdk
+          test -x /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager
+          test -d /usr/lib/android-sdk/platform-tools
+          test -d /usr/lib/android-sdk/build-tools
+          test -d /usr/lib/android-sdk/platforms
+          test -d /usr/lib/android-sdk/ndk
+          test -d /usr/lib/jvm/java-17-openjdk-amd64
           java -version
-          sdkmanager --version
-          test -d "$ANDROID_HOME"
-          test -d "$ANDROID_HOME/platform-tools"
-          test -d "$ANDROID_HOME/build-tools/33.0.2"
-          test -d "$ANDROID_HOME/platforms/android-33"
-          test -d "$ANDROID_HOME/ndk"
+          /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager --version
 
-      - name: Import project
+      - name: Verify Android assets
         run: |
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
+          find "$PROJECT_PATH" -type f \( -iname "*.ogg" -o -iname "*.wav" -o -iname "*.mp3" \) | head -50
+          find "$PROJECT_PATH" -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" \) | head -50
 
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
-          export/android/android_sdk_path = "/usr/lib/android-sdk"
-          export/android/debug_keystore = "/root/debug.keystore"
-          export/android/debug_keystore_user = "androiddebugkey"
-          export/android/debug_keystore_pass = "android"
-          export/android/force_system_user = false
-          EOF
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --import \
-            --audio-driver Dummy \
-            --verbose
-
-      - name: Verify project assets
-        run: |
-          find "$PROJECT_PATH" \
-            -type f \
-            \( -iname "*.wav" -o -iname "*.ogg" -o -iname "*.mp3" \) \
-            -print
-
-          find "$PROJECT_PATH" \
-            -type f \
-            \( -iname "*.png" \
-            -o -iname "*.jpg" \
-            -o -iname "*.jpeg" \
-            -o -iname "*.webp" \
-            -o -iname "*.svg" \) \
-            -print
-
-      - name: Android Debug Build
+      - name: Export
         run: |
           mkdir -p build/android
-
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
@@ -488,23 +324,15 @@ jobs:
           export/android/debug_keystore_pass = "android"
           export/android/force_system_user = false
           EOF
+          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
+            --export-debug "Android" "build/android/scary horror-android.apk"
 
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --verbose \
-            --audio-driver Dummy \
-            --export-debug \
-            "Android" \
-            "build/android/scary horror-android.apk"
-
-      - name: Verify APK
+      - name: Verify
         run: |
           test -f "build/android/scary horror-android.apk"
-          ls -lh build/android
 
-      - name: Upload Artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: android-debug
-          path: build/android
+          path: build/android/scary horror-android.apk
