@@ -1,117 +1,376 @@
 name: "godot-ci export"
-on: push
 
-# NOTE: If your `project.godot` is at the repository root, set `PROJECT_PATH` below to ".".
+on:
+  push:
 
 env:
   GODOT_VERSION: 4.7.2
-  EXPORT_NAME: scary-horror
   PROJECT_PATH: .
 
 jobs:
   export-windows:
-    name: Windows Export
-    runs-on: ubuntu-24.04  # Use 24.04 with godot 4
+    name: Windows 32 Bit Export
+    runs-on: ubuntu-24.04
+
     container:
       image: barichello/godot-ci:4.7.2
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Setup
+
+      - name: Setup Godot and Blender
         run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mkdir -v -p ~/.config/
-          mv /root/.config/godot ~/.config/godot
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           apt-get update
-          apt-get install -y --no-install-recommends xz-utils
-          wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
+          apt-get install -y --no-install-recommends xz-utils wget
+
+          mkdir -p \
+            "$HOME/.config/godot" \
+            "$HOME/.local/share/godot/export_templates"
+
+          mv \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          wget -nv \
+            https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz
+
           tar -xf blender-3.6.0-linux-x64.tar.xz
-          cd blender-3.6.0-linux-x64
-          touch ~/.config/godot/editor_settings-4.7.tres
-          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.7.tres
-          cd ..
-          godot -v -e --quit --headless
+
+          BLENDER_PATH="$PWD/blender-3.6.0-linux-x64/blender"
+
+          test -x "$BLENDER_PATH"
+          "$BLENDER_PATH" --version
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender3_path = "$BLENDER_PATH"
+          EOF
+
+          godot --headless --editor --quit
+
       - name: Windows Build
         run: |
-          mkdir -v -p build/windows
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
+          mkdir -p build/win32
+
+          cd "$PROJECT_PATH"
+
+          godot \
+            --headless \
+            --verbose \
+            --export-release \
+            "Windows 32 Bit" \
+            "build/win32/scary horror-win64.exe"
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows
-          path: build/windows
+          name: windows-32-bit
+          path: build/win32
+
 
   export-linux:
-    name: Linux Export
-    runs-on: ubuntu-24.04  # Use 24.04 with godot 4
+    name: Linux 64 Bit Export
+    runs-on: ubuntu-24.04
+
     container:
       image: barichello/godot-ci:4.7.2
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Setup
+
+      - name: Setup Godot and Blender
         run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           apt-get update
-          apt-get install -y --no-install-recommends xz-utils
-          wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
+          apt-get install -y --no-install-recommends xz-utils wget
+
+          mkdir -p \
+            "$HOME/.config/godot" \
+            "$HOME/.local/share/godot/export_templates"
+
+          mv \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          wget -nv \
+            https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz
+
           tar -xf blender-3.6.0-linux-x64.tar.xz
-          cd blender-3.6.0-linux-x64
-          touch ~/.config/godot/editor_settings-4.7.tres
-          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.7.tres
-          cd ..
-          godot -v -e --quit --headless
+
+          BLENDER_PATH="$PWD/blender-3.6.0-linux-x64/blender"
+
+          test -x "$BLENDER_PATH"
+          "$BLENDER_PATH" --version
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender3_path = "$BLENDER_PATH"
+          EOF
+
+          godot --headless --editor --quit
+
       - name: Linux Build
         run: |
-          mkdir -v -p build/linux
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "Linux/X11" "$EXPORT_DIR/linux/$EXPORT_NAME.x86_64"
+          mkdir -p build/linux64
+
+          cd "$PROJECT_PATH"
+
+          godot \
+            --headless \
+            --verbose \
+            --export-release \
+            "Linux 64 Bit" \
+            "build/linux64/scary horror-linux"
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linux
-          path: build/linux
+          name: linux-64-bit
+          path: build/linux64
+
 
   export-mac:
-    name: Mac Export
-    runs-on: ubuntu-24.04  # Use 24.04 with godot 4
+    name: macOS Export
+    runs-on: ubuntu-24.04
+
     container:
       image: barichello/godot-ci:4.7.2
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Setup
+
+      - name: Setup Godot and Blender
         run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           apt-get update
-          apt-get install -y --no-install-recommends xz-utils
-          wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
+          apt-get install -y --no-install-recommends xz-utils wget
+
+          mkdir -p \
+            "$HOME/.config/godot" \
+            "$HOME/.local/share/godot/export_templates"
+
+          mv \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          wget -nv \
+            https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz
+
           tar -xf blender-3.6.0-linux-x64.tar.xz
-          cd blender-3.6.0-linux-x64
-          touch ~/.config/godot/editor_settings-4.7.tres
-          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.7.tres
-          cd ..
-          godot -v -e --quit --headless
-      - name: Mac Build
+
+          BLENDER_PATH="$PWD/blender-3.6.0-linux-x64/blender"
+
+          test -x "$BLENDER_PATH"
+          "$BLENDER_PATH" --version
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender3_path = "$BLENDER_PATH"
+          EOF
+
+          godot --headless --editor --quit
+
+      - name: macOS Build
         run: |
-          mkdir -v -p build/mac
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "macOS" "$EXPORT_DIR/mac/$EXPORT_NAME.zip"
+          mkdir -p build/mac
+
+          cd "$PROJECT_PATH"
+
+          godot \
+            --headless \
+            --verbose \
+            --export-release \
+            "macOS" \
+            "build/mac/scary horror-mac.zip"
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mac
+          name: macos
           path: build/mac
+  export-windows-64:
+    name: Windows 64 Bit Export
+    runs-on: ubuntu-24.04
+
+    container:
+      image: barichello/godot-ci:4.7.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Godot and Blender
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends xz-utils wget
+
+          mkdir -p \
+            "$HOME/.config/godot" \
+            "$HOME/.local/share/godot/export_templates"
+
+          mv \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          wget -nv \
+            https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz
+
+          tar -xf blender-3.6.0-linux-x64.tar.xz
+
+          BLENDER_PATH="$PWD/blender-3.6.0-linux-x64/blender"
+
+          test -x "$BLENDER_PATH"
+          "$BLENDER_PATH" --version
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender3_path = "$BLENDER_PATH"
+          EOF
+
+          godot --headless --editor --quit
+
+      - name: Windows 64 Bit Build
+        run: |
+          mkdir -p build/win64
+
+          cd "$PROJECT_PATH"
+
+          godot \
+            --headless \
+            --verbose \
+            --export-release \
+            "Windows 64 Bit" \
+            "build/win64/scary horror-win64.exe"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-64-bit
+          path: build/win64
+
+
+  export-linux-32:
+    name: Linux 32 Bit Export
+    runs-on: ubuntu-24.04
+
+    container:
+      image: barichello/godot-ci:4.7.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Godot and Blender
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends xz-utils wget
+
+          mkdir -p \
+            "$HOME/.config/godot" \
+            "$HOME/.local/share/godot/export_templates"
+
+          mv \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          wget -nv \
+            https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz
+
+          tar -xf blender-3.6.0-linux-x64.tar.xz
+
+          BLENDER_PATH="$PWD/blender-3.6.0-linux-x64/blender"
+
+          test -x "$BLENDER_PATH"
+          "$BLENDER_PATH" --version
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender3_path = "$BLENDER_PATH"
+          EOF
+
+          godot --headless --editor --quit
+
+      - name: Linux 32 Bit Build
+        run: |
+          mkdir -p build/linux32
+
+          cd "$PROJECT_PATH"
+
+          godot \
+            --headless \
+            --verbose \
+            --export-release \
+            "Linux 32 Bit" \
+            "build/linux32/super scary-linux32"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-32-bit
+          path: build/linux32
+
+
+  export-android:
+    name: Android Debug Export
+    runs-on: ubuntu-24.04
+
+    container:
+      image: barichello/godot-ci:4.7.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Android and Godot
+        run: |
+          mkdir -p \
+            "$HOME/.config/godot" \
+            "$HOME/.local/share/godot/export_templates"
+
+          mv \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          mkdir -p build/android
+
+          godot --headless --editor --quit
+
+      - name: Android Debug Build
+        run: |
+          cd "$PROJECT_PATH"
+
+          godot \
+            --headless \
+            --verbose \
+            --export-debug \
+            "Android" \
+            "build/android/scary horror-android.apk"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-debug
+          path: build/android
