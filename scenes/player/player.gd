@@ -7,8 +7,7 @@ var posh = 0
 var gamepadinput : Vector2
 @onready var enemy = get_parent().get_node("scarymonter")
 func _ready() -> void:
-	if Gameplatform.mobile == false:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	pass
 
 func _physics_process(delta: float) -> void:
 	gamepadinput = %right_hand.get_vector2("primary")
@@ -30,7 +29,7 @@ func _physics_process(delta: float) -> void:
 
 
 	var input_dir :Vector2= %left_hand.get_vector2("primary")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction := (transform.basis * Vector3(input_dir.x, 0, -input_dir.y)).normalized()
 	if direction and posh < 6:
 		$AnimationPlayer.play("walk", -1, 1.3)
 		velocity.x = direction.x * SPEED

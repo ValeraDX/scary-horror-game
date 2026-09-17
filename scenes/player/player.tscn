@@ -344,10 +344,11 @@ collision_mask = 7
 script = ExtResource("1_8afob")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=1035190460]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 script = ExtResource("2_ugbui")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=8143898]
-transform = Transform3D(-0.99586785, -0.057306677, 0.07045056, -0.08073056, 0.20334893, -0.97577244, 0.04159223, -0.9774279, -0.20713504, -0.09153716, 0.39020282, -0.82291114)
+transform = Transform3D(-0.99586785, -0.057306677, 0.07045056, -0.08073056, 0.20334893, -0.97577244, 0.04159223, -0.9774279, -0.20713504, 0, 0, 0)
 current = true
 
 [node name="left_hand" type="XRController3D" parent="XROrigin3D" unique_id=1960726257]
