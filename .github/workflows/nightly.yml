@@ -1,3 +1,4 @@
+
 name: "godot-ci export"
 
 on:
@@ -21,41 +22,17 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Godot and Blender
+      - name: Install Blender
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends \
-            blender \
-            xz-utils \
-            wget \
-            libx11-6 \
-            libxext6 \
-            libxi6 \
-            libxrender1 \
-            libxfixes3 \
-            libxrandr2 \
-            libxkbcommon0 \
-            libsm6 \
-            libice6 \
-            libglib2.0-0 \
-            libfontconfig1 \
-            libgl1 \
-            libegl1 \
-            libdbus-1-3 \
-            libpulse0
+          apt-get install -y --no-install-recommends blender
+          blender --background --version
 
-          mkdir -p \
-            "$HOME/.config/godot" \
-            "$HOME/.local/share/godot/export_templates"
-
-          mv \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
 
           BLENDER_PATH="$(command -v blender)"
-
-          test -x "$BLENDER_PATH"
-          "$BLENDER_PATH" --background --version
 
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
@@ -64,20 +41,27 @@ jobs:
           filesystem/import/blender/blender3_path = "$BLENDER_PATH"
           EOF
 
-          godot --headless --editor --quit
+      - name: Import project
+        run: |
+          godot \
+            --headless \
+            --path "$PROJECT_PATH" \
+            --import \
+            --audio-driver Dummy \
+            --verbose
 
       - name: Windows 32 Bit Build
         run: |
           mkdir -p build/win32
-          cd "$PROJECT_PATH"
 
           godot \
             --headless \
+            --path "$PROJECT_PATH" \
             --verbose \
             --audio-driver Dummy \
             --export-release \
             "Windows 32 Bit" \
-            "build/win32/scary horror-win64.exe"
+            "build/win32/scary horror-win32.exe"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -99,41 +83,17 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Godot and Blender
+      - name: Install Blender
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends \
-            blender \
-            xz-utils \
-            wget \
-            libx11-6 \
-            libxext6 \
-            libxi6 \
-            libxrender1 \
-            libxfixes3 \
-            libxrandr2 \
-            libxkbcommon0 \
-            libsm6 \
-            libice6 \
-            libglib2.0-0 \
-            libfontconfig1 \
-            libgl1 \
-            libegl1 \
-            libdbus-1-3 \
-            libpulse0
+          apt-get install -y --no-install-recommends blender
+          blender --background --version
 
-          mkdir -p \
-            "$HOME/.config/godot" \
-            "$HOME/.local/share/godot/export_templates"
-
-          mv \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
 
           BLENDER_PATH="$(command -v blender)"
-
-          test -x "$BLENDER_PATH"
-          "$BLENDER_PATH" --background --version
 
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
@@ -142,15 +102,22 @@ jobs:
           filesystem/import/blender/blender3_path = "$BLENDER_PATH"
           EOF
 
-          godot --headless --editor --quit
+      - name: Import project
+        run: |
+          godot \
+            --headless \
+            --path "$PROJECT_PATH" \
+            --import \
+            --audio-driver Dummy \
+            --verbose
 
       - name: Windows 64 Bit Build
         run: |
           mkdir -p build/win64
-          cd "$PROJECT_PATH"
 
           godot \
             --headless \
+            --path "$PROJECT_PATH" \
             --verbose \
             --audio-driver Dummy \
             --export-release \
@@ -177,41 +144,17 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Godot and Blender
+      - name: Install Blender
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends \
-            blender \
-            xz-utils \
-            wget \
-            libx11-6 \
-            libxext6 \
-            libxi6 \
-            libxrender1 \
-            libxfixes3 \
-            libxrandr2 \
-            libxkbcommon0 \
-            libsm6 \
-            libice6 \
-            libglib2.0-0 \
-            libfontconfig1 \
-            libgl1 \
-            libegl1 \
-            libdbus-1-3 \
-            libpulse0
+          apt-get install -y --no-install-recommends blender
+          blender --background --version
 
-          mkdir -p \
-            "$HOME/.config/godot" \
-            "$HOME/.local/share/godot/export_templates"
-
-          mv \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
 
           BLENDER_PATH="$(command -v blender)"
-
-          test -x "$BLENDER_PATH"
-          "$BLENDER_PATH" --background --version
 
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
@@ -220,15 +163,22 @@ jobs:
           filesystem/import/blender/blender3_path = "$BLENDER_PATH"
           EOF
 
-          godot --headless --editor --quit
+      - name: Import project
+        run: |
+          godot \
+            --headless \
+            --path "$PROJECT_PATH" \
+            --import \
+            --audio-driver Dummy \
+            --verbose
 
       - name: Linux 32 Bit Build
         run: |
           mkdir -p build/linux32
-          cd "$PROJECT_PATH"
 
           godot \
             --headless \
+            --path "$PROJECT_PATH" \
             --audio-driver Dummy \
             --verbose \
             --export-release \
@@ -242,6 +192,7 @@ jobs:
           path: build/linux32
 
 
+ 
   export-linux-64:
     name: Linux 64 Bit Export
     runs-on: ubuntu-24.04
@@ -255,41 +206,17 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Godot and Blender
+      - name: Install Blender
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends \
-            blender \
-            xz-utils \
-            wget \
-            libx11-6 \
-            libxext6 \
-            libxi6 \
-            libxrender1 \
-            libxfixes3 \
-            libxrandr2 \
-            libxkbcommon0 \
-            libsm6 \
-            libice6 \
-            libglib2.0-0 \
-            libfontconfig1 \
-            libgl1 \
-            libegl1 \
-            libdbus-1-3 \
-            libpulse0
+          apt-get install -y --no-install-recommends blender
+          blender --background --version
 
-          mkdir -p \
-            "$HOME/.config/godot" \
-            "$HOME/.local/share/godot/export_templates"
-
-          mv \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
 
           BLENDER_PATH="$(command -v blender)"
-
-          test -x "$BLENDER_PATH"
-          "$BLENDER_PATH" --background --version
 
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
@@ -298,15 +225,22 @@ jobs:
           filesystem/import/blender/blender3_path = "$BLENDER_PATH"
           EOF
 
-          godot --headless --editor --quit
+      - name: Import project
+        run: |
+          godot \
+            --headless \
+            --path "$PROJECT_PATH" \
+            --import \
+            --audio-driver Dummy \
+            --verbose
 
       - name: Linux 64 Bit Build
         run: |
           mkdir -p build/linux64
-          cd "$PROJECT_PATH"
 
           godot \
             --headless \
+            --path "$PROJECT_PATH" \
             --verbose \
             --audio-driver Dummy \
             --export-release \
@@ -318,6 +252,7 @@ jobs:
         with:
           name: linux-64-bit
           path: build/linux64
+
 
 
   export-mac:
@@ -333,41 +268,17 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Godot and Blender
+      - name: Install Blender
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends \
-            blender \
-            xz-utils \
-            wget \
-            libx11-6 \
-            libxext6 \
-            libxi6 \
-            libxrender1 \
-            libxfixes3 \
-            libxrandr2 \
-            libxkbcommon0 \
-            libsm6 \
-            libice6 \
-            libglib2.0-0 \
-            libfontconfig1 \
-            libgl1 \
-            libegl1 \
-            libdbus-1-3 \
-            libpulse0
+          apt-get install -y --no-install-recommends blender
+          blender --background --version
 
-          mkdir -p \
-            "$HOME/.config/godot" \
-            "$HOME/.local/share/godot/export_templates"
-
-          mv \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
 
           BLENDER_PATH="$(command -v blender)"
-
-          test -x "$BLENDER_PATH"
-          "$BLENDER_PATH" --background --version
 
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
@@ -376,15 +287,22 @@ jobs:
           filesystem/import/blender/blender3_path = "$BLENDER_PATH"
           EOF
 
-          godot --headless --editor --quit
+      - name: Import project
+        run: |
+          godot \
+            --headless \
+            --path "$PROJECT_PATH" \
+            --import \
+            --audio-driver Dummy \
+            --verbose
 
       - name: macOS Build
         run: |
           mkdir -p build/mac
-          cd "$PROJECT_PATH"
 
           godot \
             --headless \
+            --path "$PROJECT_PATH" \
             --verbose \
             --audio-driver Dummy \
             --export-release \
@@ -396,7 +314,9 @@ jobs:
         with:
           name: macos
           path: build/mac
-          
+
+
+
   export-android:
     name: Android Debug Export
     runs-on: ubuntu-24.04
@@ -410,70 +330,70 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Android, Godot, and Blender
+      - name: Verify Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          java -version
+          sdkmanager --version
+          ls -la "$ANDROID_HOME"
+          ls -la "$ANDROID_HOME/platform-tools"
+          ls -la "$ANDROID_HOME/build-tools"
+          ls -la "$ANDROID_HOME/platforms"
+          ls -la "$ANDROID_HOME/ndk"
+
+      - name: Install Blender
         run: |
           apt-get update
+          apt-get install -y --no-install-recommends blender
+          blender --background --version
 
-          apt-get install -y --no-install-recommends \
-            blender \
-            xz-utils \
-            wget \
-            libx11-6 \
-            libxext6 \
-            libxi6 \
-            libxrender1 \
-            libxfixes3 \
-            libxrandr2 \
-            libxkbcommon0 \
-            libsm6 \
-            libice6 \
-            libglib2.0-0 \
-            libfontconfig1 \
-            libgl1 \
-            libegl1 \
-            libdbus-1-3 \
-            libpulse0
-
-          mkdir -p \
-            "$HOME/.config/godot" \
-            "$HOME/.local/share/godot/export_templates"
-
-          mv \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
 
           BLENDER_PATH="$(command -v blender)"
-
-          test -x "$BLENDER_PATH"
-          "$BLENDER_PATH" --background --version
 
           cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           filesystem/import/blender/blender3_path = "$BLENDER_PATH"
+          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
+          export/android/android_sdk_path = "/usr/lib/android-sdk"
+          export/android/debug_keystore = "/root/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          export/android/force_system_user = false
           EOF
 
+      - name: Import project
+        run: |
           godot \
             --headless \
             --path "$PROJECT_PATH" \
-            --editor \
-            --quit \
-            --audio-driver Dummy
+            --import \
+            --audio-driver Dummy \
+            --verbose
 
       - name: Verify project assets
         run: |
-          echo "Audio files:"
           find "$PROJECT_PATH" \
             -type f \
             \( -iname "*.wav" -o -iname "*.ogg" -o -iname "*.mp3" \) \
             -print
 
-          echo "Texture files:"
+
           find "$PROJECT_PATH" \
             -type f \
-            \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" -o -iname "*.svg" \) \
+            \( -iname "*.png" \
+            -o -iname "*.jpg" \
+            -o -iname "*.jpeg" \
+            -o -iname "*.webp" \
+            -o -iname "*.svg" \) \
             -print
+
+
+          git lfs ls-files
 
       - name: Android Debug Build
         run: |
@@ -488,8 +408,15 @@ jobs:
             "Android" \
             "build/android/scary horror-android.apk"
 
+      - name: Verify APK
+        run: |
+          test -f "build/android/scary horror-android.apk"
+          ls -lh build/android
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: android-debug
           path: build/android
+
+
