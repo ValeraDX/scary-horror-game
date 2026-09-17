@@ -1,14 +1,15 @@
-extends Node
-var touch = false
-var vr = false
-var enablemouse = true
+extends CheckButton
+@export var variable : StringName
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if OS.get_name() == "Android" or OS.get_name() == "iOS":
-		touch = true
-	else:
-		touch = false
+	button_pressed = bool(Gameplatform.get(variable))
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+
+func _on_toggled(toggled_on: bool) -> void:
+	Gameplatform.set(variable, toggled_on)

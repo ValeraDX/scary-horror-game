@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bihxggmxsuigo"
+path="res://.godot/imported/NFL Theme Song (HQ).mp3-2a65bc578dd521da3be121606fc5c66d.mp3str"
+
+[deps]
+
+source_file="res://music/NFL Theme Song (HQ).mp3"
+dest_files=["res://.godot/imported/NFL Theme Song (HQ).mp3-2a65bc578dd521da3be121606fc5c66d.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=52.2
+bpm=160.0
+beat_count=188
+bar_beats=4

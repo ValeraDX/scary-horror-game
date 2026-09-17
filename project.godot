@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="scary horror"
-run/main_scene="uid://t4y60n8nbfok"
+run/main_scene="uid://cuh7o14kuxt5e"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
@@ -23,9 +23,13 @@ config/icon="res://icon.svg"
 
 Gameplatform="*res://scripts/gameplatform.gd"
 
+[dotnet]
+
+project/assembly_name="scary horror"
+
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/mixamo_animation_retargeter/plugin.cfg")
+enabled=PackedStringArray("res://addons/MultiTouchGui/plugin.cfg", "res://addons/addons/MultiTouchGui/plugin.cfg", "res://addons/mixamo_animation_retargeter/plugin.cfg")
 
 [global_group]
 

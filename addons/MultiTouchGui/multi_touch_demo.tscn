@@ -1,0 +1,94 @@
+[gd_scene load_steps=8 format=3 uid="uid://dk3r2xc8u5a1o"]
+
+[ext_resource type="Script" path="res://addons/MultiTouchGui/MultiTouchVSlider.gd" id="1_paf1y"]
+[ext_resource type="Script" path="res://addons/MultiTouchGui/MultiTouchHSlider.gd" id="2_lqhkq"]
+[ext_resource type="Script" path="res://addons/MultiTouchGui/MultiTouchButton.gd" id="3_k5aum"]
+[ext_resource type="Script" path="res://addons/MultiTouchGui/MultiTouchPanel.gd" id="4_6gugy"]
+[ext_resource type="Script" path="res://addons/MultiTouchGui/MultiTouchLineEdit.gd" id="5_8kvhb"]
+[ext_resource type="Script" path="res://addons/MultiTouchGui/multi_touch_debug.gd" id="6_uasqy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vssji"]
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[node name="MultiTouchDemo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MultiTouchVSlider" type="VSlider" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.408
+anchor_top = 0.028
+anchor_right = 0.451
+anchor_bottom = 0.316
+offset_left = -0.0160217
+offset_top = -0.144001
+offset_right = 0.447937
+offset_bottom = 0.231995
+script = ExtResource("1_paf1y")
+
+[node name="MultiTouchHSlider" type="HSlider" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.424
+anchor_top = 0.364
+anchor_right = 0.424
+anchor_bottom = 0.364
+offset_left = 0.551971
+offset_top = 0.127991
+offset_right = 193.552
+offset_bottom = 16.128
+script = ExtResource("2_lqhkq")
+padding = 0.2
+
+[node name="MultiTouchButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.567
+anchor_top = 0.063
+anchor_right = 0.567
+anchor_bottom = 0.063
+offset_left = -0.184021
+offset_top = 0.175999
+offset_right = 171.816
+offset_bottom = 68.176
+text = "Not Pressed"
+script = ExtResource("3_k5aum")
+
+[node name="MultiTouchPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 424.0
+offset_bottom = 424.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vssji")
+script = ExtResource("4_6gugy")
+
+[node name="MultiTouchLineEdit" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.648
+anchor_top = 0.329
+anchor_right = 0.648
+anchor_bottom = 0.329
+offset_left = 0.504028
+offset_top = -0.192017
+offset_right = 270.504
+offset_bottom = 30.808
+placeholder_text = "Put text here"
+clear_button_enabled = true
+caret_mid_grapheme = true
+script = ExtResource("5_8kvhb")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 499.0
+offset_right = 337.0
+offset_bottom = 522.0
+script = ExtResource("6_uasqy")

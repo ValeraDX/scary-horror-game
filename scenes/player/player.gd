@@ -5,15 +5,22 @@ const JUMP_VELOCITY = 8
 const mouseSensitivity = 200
 var posh = 0
 var gamepadinput : Vector2
+@export var normalcamera : Camera3D
+@export var vrcamera : XRCamera3D
 @onready var enemy = get_parent().get_node("scarymonter")
 func _ready() -> void:
-	pass
+	vrcamera.current = Gameplatform.vr
+	normalcamera.current = not Gameplatform.vr
+	if Gameplatform.enablemouse:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
-	gamepadinput = %right_hand.get_vector2("primary")
+	if Gameplatform.vr:
+		gamepadinput = %right_hand.get_vector2("primary")
 	rotation.y -= gamepadinput.x * delta * 3.5
-	#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x += gamepadinput.y * delta * 3.5
-	#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
+	if Gameplatform.vr == false:
+		normalcamera.rotation.x += gamepadinput.y * delta * 3.5
+		normalcamera.rotation.x = clamp(normalcamera.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
 	if position.y < -5:
 		posh = 0
 		get_tree().reload_current_scene()
@@ -24,11 +31,14 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	# Handle jump.
-	if (Input.is_action_just_pressed("jump") or %right_hand.get_input("ax_button") == true) and is_on_floor():
+	if (Input.is_action_pressed("jump") or %right_hand.get_input("ax_button") == true) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-
-	var input_dir :Vector2= %left_hand.get_vector2("primary")
+	var input_dir : Vector2 = Vector2(0, 0)
+	if Gameplatform.vr:
+		input_dir = %left_hand.get_vector2("primary")
+	else:
+		input_dir = Input.get_vector("left", "right", "down", "up")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, -input_dir.y)).normalized()
 	if direction and posh < 6:
 		$AnimationPlayer.play("walk", -1, 1.3)
@@ -55,14 +65,16 @@ func _input(event):
 		#if event.axis == JoyAxis.JOY_AXIS_RIGHT_Y:
 			#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x -= event.axis_value
 		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
-	if event is InputEventMouseMotion and Gameplatform.mobile == false:
+	if event is InputEventMouseMotion and Gameplatform.enablemouse == true:
 		rotation.y -= event.relative.x / mouseSensitivity
-		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x -= event.relative.y / mouseSensitivity
-		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
-	if event is InputEventScreenDrag and Gameplatform.mobile == true:
+		if Gameplatform.vr == false:
+			normalcamera.rotation.x -= event.relative.y / mouseSensitivity
+			normalcamera.rotation.x = clamp(normalcamera.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
+	if event is InputEventScreenDrag and Gameplatform.touch == true:
 		rotate_y(deg_to_rad(-event.relative.x / mouseSensitivity * 32))
-		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x -= event.relative.y / mouseSensitivity
-		#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
+		if Gameplatform.vr == false:
+			normalcamera.rotation.x -= event.relative.y / mouseSensitivity
+			normalcamera.rotation.x = clamp(normalcamera.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
 
 func generickill() -> void:
 	$Aaaaaaaaaaaaaa.play()
@@ -80,11 +92,3 @@ func _on_poshalko_collected() -> void:
 	posh+=1
 	$CanvasLayer/Control/TextureProgressBar.value+=1
 	$"Skeleton/CreepyBellSoundEffect-KiiroKarol".play()
-
-
-
-
-
-func _on_touch_screen_button_pressed() -> void:
-	Input.action_press("jump")
-	Input.action_release("jump")
