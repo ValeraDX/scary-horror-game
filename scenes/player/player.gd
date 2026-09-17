@@ -11,8 +11,7 @@ func _ready() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
-	gamepadinput = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
-	gamepadinput = %left_hand.get_vector2("primary")
+	gamepadinput = %right_hand.get_vector2("primary")
 	rotation.y -= gamepadinput.x * delta * 3.5
 	#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x += gamepadinput.y * delta * 3.5
 	#$Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x = clamp($Skeleton/BoneAttachment3D/Head/Camera3D.rotation.x, deg_to_rad(-90), deg_to_rad(90) )
@@ -26,7 +25,7 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if (Input.is_action_just_pressed("jump") or %right_hand.get_input("ax_button") == true) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 

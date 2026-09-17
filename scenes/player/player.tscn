@@ -354,6 +354,10 @@ current = true
 unique_name_in_owner = true
 tracker = &"left_hand"
 
+[node name="right_hand" type="XRController3D" parent="XROrigin3D" unique_id=1037098903]
+unique_name_in_owner = true
+tracker = &"right_hand"
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1134227652]
 shape = SubResource("CapsuleShape3D_3vyb7")
 
