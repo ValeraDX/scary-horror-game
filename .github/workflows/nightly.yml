@@ -19,11 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Godot
-        run: |
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
-
       - name: Install Blender
         run: |
           apt-get update
@@ -31,8 +26,31 @@ jobs:
           blender --background --version
           test -x /usr/bin/blender
 
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+
+          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
       - name: Import project
         run: |
+          mkdir -p "$HOME/.config/godot"
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
           godot \
             --headless \
             --path "$PROJECT_PATH" \
@@ -43,6 +61,13 @@ jobs:
       - name: Windows 32 Bit Build
         run: |
           mkdir -p build/win32
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
 
           godot \
             --headless \
@@ -70,11 +95,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Godot
-        run: |
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
-
       - name: Install Blender
         run: |
           apt-get update
@@ -82,8 +102,30 @@ jobs:
           blender --background --version
           test -x /usr/bin/blender
 
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+
+          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
       - name: Import project
         run: |
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
           godot \
             --headless \
             --path "$PROJECT_PATH" \
@@ -94,6 +136,13 @@ jobs:
       - name: Windows 64 Bit Build
         run: |
           mkdir -p build/win64
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
 
           godot \
             --headless \
@@ -121,11 +170,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Godot
-        run: |
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
-
       - name: Install Blender
         run: |
           apt-get update
@@ -133,8 +177,30 @@ jobs:
           blender --background --version
           test -x /usr/bin/blender
 
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+
+          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
       - name: Import project
         run: |
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
           godot \
             --headless \
             --path "$PROJECT_PATH" \
@@ -145,6 +211,13 @@ jobs:
       - name: Linux 32 Bit Build
         run: |
           mkdir -p build/linux32
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
 
           godot \
             --headless \
@@ -172,11 +245,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Godot
-        run: |
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
-
       - name: Install Blender
         run: |
           apt-get update
@@ -184,8 +252,30 @@ jobs:
           blender --background --version
           test -x /usr/bin/blender
 
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+
+          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
       - name: Import project
         run: |
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
           godot \
             --headless \
             --path "$PROJECT_PATH" \
@@ -196,6 +286,13 @@ jobs:
       - name: Linux 64 Bit Build
         run: |
           mkdir -p build/linux64
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
 
           godot \
             --headless \
@@ -223,11 +320,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Godot
-        run: |
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
-
       - name: Install Blender
         run: |
           apt-get update
@@ -235,8 +327,30 @@ jobs:
           blender --background --version
           test -x /usr/bin/blender
 
+      - name: Configure Godot
+        run: |
+          mkdir -p "$HOME/.config/godot"
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+
+          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
       - name: Import project
         run: |
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
+
           godot \
             --headless \
             --path "$PROJECT_PATH" \
@@ -247,6 +361,13 @@ jobs:
       - name: macOS Build
         run: |
           mkdir -p build/mac
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          EOF
 
           godot \
             --headless \
@@ -274,13 +395,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Godot
+      - name: Install Blender
         run: |
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/"
+          apt-get update
+          apt-get install -y --no-install-recommends blender
+          blender --background --version
+          test -x /usr/bin/blender
 
+      - name: Configure Godot
+        run: |
           mkdir -p "$HOME/.config/godot"
-          cp /root/.config/godot/editor_settings-4.7.tres "$HOME/.config/godot/editor_settings-4.7.tres"
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+
+          cp -a "/root/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
+          export/android/android_sdk_path = "/usr/lib/android-sdk"
+          export/android/debug_keystore = "/root/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          export/android/force_system_user = false
+          EOF
 
       - name: Verify Android SDK
         run: |
@@ -293,15 +434,21 @@ jobs:
           test -d "$ANDROID_HOME/platforms/android-33"
           test -d "$ANDROID_HOME/ndk"
 
-      - name: Install Blender
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends blender
-          blender --background --version
-          test -x /usr/bin/blender
-
       - name: Import project
         run: |
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
+          export/android/android_sdk_path = "/usr/lib/android-sdk"
+          export/android/debug_keystore = "/root/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          export/android/force_system_user = false
+          EOF
+
           godot \
             --headless \
             --path "$PROJECT_PATH" \
@@ -328,6 +475,19 @@ jobs:
       - name: Android Debug Build
         run: |
           mkdir -p build/android
+
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
+          export/android/android_sdk_path = "/usr/lib/android-sdk"
+          export/android/debug_keystore = "/root/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          export/android/force_system_user = false
+          EOF
 
           godot \
             --headless \
