@@ -30,7 +30,8 @@ jobs:
           wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
           tar -xf blender-3.6.0-linux-x64.tar.xz
           cd blender-3.6.0-linux-x64
-          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.tres
+          touch ~/.config/godot/editor_settings-4.7.tres
+          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.7.tres
           cd ..
           godot -v -e --quit --headless
       - name: Windows Build
@@ -64,7 +65,8 @@ jobs:
           wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
           tar -xf blender-3.6.0-linux-x64.tar.xz
           cd blender-3.6.0-linux-x64
-          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.tres
+          touch ~/.config/godot/editor_settings-4.7.tres
+          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.7.tres
           cd ..
           godot -v -e --quit --headless
       - name: Linux Build
@@ -98,7 +100,8 @@ jobs:
           wget -nv https://mirrors.dotsrc.org/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz 
           tar -xf blender-3.6.0-linux-x64.tar.xz
           cd blender-3.6.0-linux-x64
-          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.tres
+          touch ~/.config/godot/editor_settings-4.7.tres
+          pwd | sed 's/^/filesystem\/import\/blender\/blender3_path = \"/;s/$/"/' >> ~/.config/godot/editor_settings-4.7.tres
           cd ..
           godot -v -e --quit --headless
       - name: Mac Build
