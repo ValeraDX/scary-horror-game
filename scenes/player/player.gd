@@ -1,22 +1,28 @@
 extends CharacterBody3D
+
 signal kill(cause)
+
 const SPEED = 7.0
 const JUMP_VELOCITY = 8
 const mouseSensitivity = 200
 var posh = 0
 var gamepadinput : Vector2
+
 @export var normalcamera : Camera3D
 @export var vrcamera : XRCamera3D
+
 @onready var enemy = get_parent().get_node("scarymonter")
+
 func _ready() -> void:
 	vrcamera.current = Gameplatform.vr
 	normalcamera.current = not Gameplatform.vr
 	if Gameplatform.enablemouse:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
+	
 func _physics_process(delta: float) -> void:
 	if Gameplatform.vr:
 		gamepadinput = %right_hand.get_vector2("primary")
+		
 	rotation.y -= gamepadinput.x * delta * 3.5
 	if Gameplatform.vr == false:
 		normalcamera.rotation.x += gamepadinput.y * delta * 3.5
@@ -24,6 +30,8 @@ func _physics_process(delta: float) -> void:
 	if position.y < -5:
 		posh = 0
 		get_tree().reload_current_scene()
+	
+	
 	$SubViewportContainer/SubViewport/backcam.position = Vector3(position.x + 3, position.y + 2, position.z + 3)
 	$SubViewportContainer/SubViewport/backcam.look_at(position)
 	# Add the gravity.
