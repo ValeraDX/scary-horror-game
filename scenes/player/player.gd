@@ -1,5 +1,5 @@
 extends CharacterBody3D
-signal kill(cause)
+#signal kill(cause)
 const SPEED = 7.0
 const JUMP_VELOCITY = 8
 const mouseSensitivity = 200
@@ -82,7 +82,7 @@ func generickill() -> void:
 	print("damn")
 
 
-func _on_scarymonter_kill(cause: Variant) -> void:
+func _on_scarymonter_kill(_cause: Variant) -> void:
 	if posh < 6:
 		generickill()
 	

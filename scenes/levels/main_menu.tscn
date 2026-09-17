@@ -817,26 +817,26 @@ playback_default_blend_time = 0.5
 
 [node name="timers" type="Node" parent="." unique_id=1036183653]
 
-[node name="floorappear" type="Timer" parent="timers" unique_id=1623193936 node_paths=PackedStringArray("floor")]
+[node name="floorappear" type="Timer" parent="timers" unique_id=1623193936 node_paths=PackedStringArray("node_floor")]
 wait_time = 1.75
 one_shot = true
 autostart = true
 script = ExtResource("11_pwqr4")
-floor = NodePath("../../floor")
+node_floor = NodePath("../../floor")
 
-[node name="floorappear2" type="Timer" parent="timers" unique_id=826373137 node_paths=PackedStringArray("floor")]
+[node name="floorappear2" type="Timer" parent="timers" unique_id=826373137 node_paths=PackedStringArray("node_floor")]
 wait_time = 3.9
 one_shot = true
 autostart = true
 script = ExtResource("11_pwqr4")
-floor = NodePath("../../guy")
+node_floor = NodePath("../../guy")
 
-[node name="floorappear3" type="Timer" parent="timers" unique_id=403856861 node_paths=PackedStringArray("floor")]
+[node name="floorappear3" type="Timer" parent="timers" unique_id=403856861 node_paths=PackedStringArray("node_floor")]
 wait_time = 6.0
 one_shot = true
 autostart = true
 script = ExtResource("11_pwqr4")
-floor = NodePath("../../PoolTable")
+node_floor = NodePath("../../PoolTable")
 
 [node name="floorappear4" type="Timer" parent="timers" unique_id=837555503 node_paths=PackedStringArray("label")]
 wait_time = 6.0
@@ -870,12 +870,12 @@ script = ExtResource("12_y2ttv")
 label = NodePath("../../Control/Label")
 txt = "[color=red] SCARIEST[color=white] [tornado freq=8 radius=20]GAME[/tornado] IN DECADES"
 
-[node name="floorappear8" type="Timer" parent="timers" unique_id=1672047 node_paths=PackedStringArray("floor")]
+[node name="floorappear8" type="Timer" parent="timers" unique_id=1672047 node_paths=PackedStringArray("node_floor")]
 wait_time = 8.0
 one_shot = true
 autostart = true
 script = ExtResource("11_pwqr4")
-floor = NodePath("../../Control/menu")
+node_floor = NodePath("../../Control/menu")
 
 [node name="PoolTable" type="MeshInstance3D" parent="." unique_id=1358202431]
 transform = Transform3D(1.7135152, 0, -0.07135488, 0, 1.7150003, 0, 0.07135488, 0, 1.7135152, -8.594822, 0.557863, -1.1760476)

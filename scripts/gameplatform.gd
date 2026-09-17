@@ -8,7 +8,3 @@ func _ready() -> void:
 		touch = true
 	else:
 		touch = false
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
