@@ -1,0 +1,290 @@
+name: "godot-ci release"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.2"
+  PROJECT_PATH: "."
+
+jobs:
+  export:
+    runs-on: ubuntu-26.04
+
+    container:
+      image: barichello/godot-ci:4.7.2
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-32
+            preset: "Windows 32 Bit"
+            output: "build/win32/scary horror-win32.exe"
+            artifact: windows-32
+            android: "false"
+
+          - name: windows-64
+            preset: "Windows 64 Bit"
+            output: "build/win64/scary horror-win64.exe"
+            artifact: windows-64
+            android: "false"
+
+          - name: linux-32
+            preset: "Linux 32 Bit"
+            output: "build/linux32/super scary-linux32"
+            artifact: linux-32
+            android: "false"
+
+          - name: linux-64
+            preset: "Linux 64 Bit"
+            output: "build/linux64/scary horror-linux"
+            artifact: linux-64
+            android: "false"
+
+          - name: macos
+            preset: "macOS"
+            output: "build/mac/scary horror-mac.zip"
+            artifact: macos
+            android: "false"
+
+          - name: android
+            preset: "Android"
+            output: "build/android/scary horror-android.apk"
+            artifact: android-debug
+            android: "true"
+
+    name: Export ${{ matrix.name }}
+
+    env:
+      HOME: /tmp/godot-home
+      ANDROID_SDK_ROOT: /opt/android-sdk
+      ANDROID_HOME: /opt/android-sdk
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      BLENDER_USER_CONFIG: /tmp/godot-home/.config/blender
+      BLENDER_USER_CACHE: /tmp/godot-home/.cache/blender
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install common dependencies
+        shell: bash
+        run: |
+          set -euxo pipefail
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            blender \
+            curl \
+            unzip \
+            ca-certificates \
+            openjdk-17-jdk
+          mkdir -p "$BLENDER_USER_CONFIG"
+          mkdir -p "$BLENDER_USER_CACHE"
+          blender --background --version
+          test -x /usr/bin/blender
+
+      - name: Install Android SDK
+        if: matrix.android == 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+          curl -fL \
+            "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip" \
+            -o /tmp/android-commandline-tools.zip
+          rm -rf /tmp/android-commandline-tools
+          mkdir -p /tmp/android-commandline-tools
+          unzip -q \
+            /tmp/android-commandline-tools.zip \
+            -d /tmp/android-commandline-tools
+          mv \
+            /tmp/android-commandline-tools/cmdline-tools \
+            "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+          yes | sdkmanager \
+            --sdk_root="$ANDROID_SDK_ROOT" \
+            --licenses >/dev/null || true
+          sdkmanager \
+            --sdk_root="$ANDROID_SDK_ROOT" \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
+
+      - name: Create Android debug keystore
+        if: matrix.android == 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$HOME/.android"
+          keytool -genkeypair \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -noprompt
+
+      - name: Prepare home directory
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$HOME"
+          mkdir -p "$BLENDER_USER_CONFIG"
+          mkdir -p "$BLENDER_USER_CACHE"
+          mkdir -p "$HOME/.config/godot"
+
+      - name: Configure Godot
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$HOME/.config/godot"
+
+          if [ "${{ matrix.android }}" = "true" ]; then
+            cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          filesystem/import/blender/rpc_port = 0
+          export/android/java_sdk_path = "${JAVA_HOME}"
+          export/android/android_sdk_path = "${ANDROID_SDK_ROOT}"
+          export/android/debug_keystore = "${HOME}/.android/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          export/android/force_system_user = false
+          EOF
+          else
+            cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          filesystem/import/blender/rpc_port = 0
+          EOF
+          fi
+
+      - name: Import Godot project
+        shell: bash
+        run: |
+          set -euxo pipefail
+          rm -rf "$PROJECT_PATH/.godot"
+          mkdir -p "$PROJECT_PATH/.godot"
+          timeout 600s godot \
+            --headless \
+            --editor \
+            --path "$PROJECT_PATH" \
+            --verbose \
+            --quit-after 120
+          test -d "$PROJECT_PATH/.godot/imported"
+          find "$PROJECT_PATH/.godot/imported" -maxdepth 1 -type f \
+            | sort \
+            | head -30
+
+      - name: Install Godot export templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -a \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/"
+
+      - name: Verify Android environment
+        if: matrix.android == 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test -x "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          test -d "$ANDROID_SDK_ROOT/platform-tools"
+          test -d "$ANDROID_SDK_ROOT/platforms/android-34"
+          test -d "$ANDROID_SDK_ROOT/build-tools/34.0.0"
+          test -d "$JAVA_HOME"
+          test -f "$HOME/.android/debug.keystore"
+          java -version
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --version
+
+      - name: Export
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$(dirname "${{ matrix.output }}")"
+          if [ "${{ matrix.android }}" = "true" ]; then
+            godot \
+              --headless \
+              --audio-driver Dummy \
+              --path "$PROJECT_PATH" \
+              --verbose \
+              --install-android-build-template \
+              --export-debug \
+              "${{ matrix.preset }}" \
+              "${{ matrix.output }}"
+          else
+            godot \
+              --headless \
+              --audio-driver Dummy \
+              --path "$PROJECT_PATH" \
+              --verbose \
+              --export-release \
+              "${{ matrix.preset }}" \
+              "${{ matrix.output }}"
+          fi
+
+      - name: Verify export
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test -f "${{ matrix.output }}"
+          test -s "${{ matrix.output }}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.output }}
+          if-no-files-found: error
+
+  release:
+    needs: export
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Rename files for release
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p release-assets
+
+          find dist -type f | while read -r file; do
+            base="$(basename "$file")"
+            case "$base" in
+              *.exe) cp "$file" "release-assets/$base" ;;
+              *.zip) cp "$file" "release-assets/$base" ;;
+              *.apk) cp "$file" "release-assets/$base" ;;
+              *) cp "$file" "release-assets/$base" ;;
+            esac
+          done
+
+          ls -lah release-assets
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          files: release-assets/*
