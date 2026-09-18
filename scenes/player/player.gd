@@ -7,6 +7,7 @@ var posh = 0
 var gamepadinput : Vector2
 @export var normalcamera : Camera3D
 @export var vrcamera : XRCamera3D
+@export var joystick : VirtualJoystick
 @onready var enemy = get_parent().get_node("scarymonter")
 func _ready() -> void:
 	vrcamera.current = Gameplatform.vr

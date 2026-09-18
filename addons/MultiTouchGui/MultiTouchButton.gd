@@ -2,13 +2,17 @@ extends Button
 class_name MultiTouchButton
 @export_custom(PROPERTY_HINT_INPUT_NAME, &"show_builtin") var input_to_do : StringName = ""
 
-func _gui_input(event):
+func _gui_input(event) -> void:
 	var event_pos_adjusted : Vector2
-	var inside : bool
+	var inside : bool = false
+	var truepos : Vector2 = position
 	if event.get(&"position"):
 		event_pos_adjusted = event.position + global_position
-		inside = event_pos_adjusted.x > position.x and event_pos_adjusted.y > position.y and event_pos_adjusted.x < position.x + size.x and event_pos_adjusted.y < position.y + size.y
-	
+		if !offset_transform_visual_only:
+			truepos += offset_transform_position
+			truepos += offset_transform_position_ratio * size
+		inside = event_pos_adjusted.x > truepos.x and event_pos_adjusted.y > truepos.y and event_pos_adjusted.x < truepos.x + size.x and event_pos_adjusted.y < truepos.y + size.y
+	## right now the things above do not account for offset scale or anything but im tired	
 	if event is InputEventScreenTouch and event.pressed and inside:
 		
 		if toggle_mode:
