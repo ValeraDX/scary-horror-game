@@ -202,6 +202,17 @@ jobs:
           find "$PROJECT_PATH/.godot/imported" -maxdepth 1 -type f \
             | sort \
             | head -30
+
+      - name: Install Godot export templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+      
+          cp -a \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/"
       
       - name: Install Android build template
         if: matrix.android == 'true'
@@ -223,19 +234,8 @@ jobs:
           find "$PROJECT_PATH/android" -maxdepth 3 -type f | sort | head -50
 
           test -d "$PROJECT_PATH/android/build"
+
       
-      - name: Install Android build template
-        if: matrix.android == 'true'
-        shell: bash
-        run: |
-          set -euxo pipefail
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --install-android-build-template
-          
-
       - name: Verify Android environment
         if: matrix.android == 'true'
         shell: bash
