@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c6qglt55bejy0" path="res://scenes/levels/mainmenu/btn_play.gd" id="1_djhkt"]
 [ext_resource type="Texture2D" uid="uid://cbbk18bqqn74o" path="res://objects/checkers.png" id="1_fsby3"]
 [ext_resource type="Script" uid="uid://diahuf4rpwaql" path="res://scenes/levels/mainmenu/globaltoggle.gd" id="1_g5b8e"]
+[ext_resource type="Script" uid="uid://bq63ghb2echld" path="res://scenes/levels/mainmenu/main_menu.gd" id="1_w62eu"]
 [ext_resource type="AudioStream" uid="uid://bihxggmxsuigo" path="res://music/NFL Theme Song (HQ).mp3" id="2_leamy"]
 [ext_resource type="PackedScene" uid="uid://t4y60n8nbfok" path="res://scenes/levels/test.tscn" id="2_p8l7r"]
 [ext_resource type="PackedScene" uid="uid://c2lhprnchkg2u" path="res://scenes/player/player.blend" id="3_2arew"]
@@ -45,44 +46,6 @@ fog_density = 0.1468
 fog_height_density = 16.0
 volumetric_fog_density = 0.123
 volumetric_fog_albedo = Color(0, 0, 0, 1)
-
-[sub_resource type="Animation" id="Animation_leamy"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("floor/CSGBox3D:material:uv1_offset")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_721jg"]
-resource_name = "new_animation"
-length = 0.7
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("floor/CSGBox3D:material:uv1_offset")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.7),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 3)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_geflf"]
-_data = {
-&"RESET": SubResource("Animation_leamy"),
-&"new_animation": SubResource("Animation_721jg")
-}
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8g7gl"]
 resource_name = "Mat"
@@ -406,42 +369,42 @@ albedo_texture = ExtResource("15_p8l7r")
 metallic = 1.0
 metallic_texture = ExtResource("17_w62eu")
 
-[sub_resource type="Animation" id="Animation_gdcvq"]
+[sub_resource type="Animation" id="Animation_leamy"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("floor/CSGBox3D:material:uv1_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-8.594822, 0.557863, -1.1760476)]
+"values": [Vector3(0, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_y2ttv"]
+[sub_resource type="Animation" id="Animation_721jg"]
 resource_name = "new_animation"
-length = 3.1666667
+length = 0.7
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 2
+tracks/0/path = NodePath("floor/CSGBox3D:material:uv1_offset")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.7, 1.3, 2, 3.1333334),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-8.594822, 0.557863, -1.1760476), Vector3(-12.134618, 1.8076859, -1.1760476), Vector3(-16.977055, 0.557863, -1.1760476), Vector3(-12.487932, 0.3900923, 0.7336836), Vector3(-8.594822, 0.557863, -1.1760476)]
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 3)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_djhkt"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_geflf"]
 _data = {
-&"RESET": SubResource("Animation_gdcvq"),
-&"new_animation": SubResource("Animation_y2ttv")
+&"RESET": SubResource("Animation_leamy"),
+&"new_animation": SubResource("Animation_721jg")
 }
 
 [sub_resource type="Animation" id="Animation_g5b8e"]
@@ -577,7 +540,48 @@ _data = {
 &"hi": SubResource("Animation_tl0ru")
 }
 
-[node name="MainMenu" type="Node3D" unique_id=605835835]
+[sub_resource type="Animation" id="Animation_gdcvq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-8.594822, 0.557863, -1.1760476)]
+}
+
+[sub_resource type="Animation" id="Animation_y2ttv"]
+resource_name = "new_animation"
+length = 3.1666667
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.3, 2, 3.1333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-8.594822, 0.557863, -1.1760476), Vector3(-12.134618, 1.8076859, -1.1760476), Vector3(-16.977055, 0.557863, -1.1760476), Vector3(-12.487932, 0.3900923, 0.7336836), Vector3(-8.594822, 0.557863, -1.1760476)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_djhkt"]
+_data = {
+&"RESET": SubResource("Animation_gdcvq"),
+&"new_animation": SubResource("Animation_y2ttv")
+}
+
+[node name="MainMenu" type="Node3D" unique_id=605835835 node_paths=PackedStringArray("music", "musicsync")]
+script = ExtResource("1_w62eu")
+music = NodePath("AudioStreamPlayer")
+musicsync = NodePath("anim_players/musicsync")
 
 [node name="Control" type="Control" parent="." unique_id=1444139280]
 propagate_maximum_size = true
@@ -741,10 +745,6 @@ environment = SubResource("Environment_721jg")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=491152580]
 transform = Transform3D(0.992525, -1.47898e-08, -0.122043, 0.0733316, 0.799349, 0.596375, 0.097555, -0.600867, 0.793374, -8.78475, 7.34525, 5.39028)
 shadow_enabled = true
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1440524040]
-libraries/ = SubResource("AnimationLibrary_geflf")
-autoplay = &"new_animation"
 
 [node name="guy" type="Node3D" parent="." unique_id=998761882]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.439981, 1.510672, 2.8900354)
@@ -969,18 +969,21 @@ surface_material_override/8 = SubResource("StandardMaterial3D_3b3yk")
 surface_material_override/9 = SubResource("StandardMaterial3D_kgv18")
 surface_material_override/10 = SubResource("StandardMaterial3D_qxdew")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PoolTable" unique_id=43732874]
-libraries/ = SubResource("AnimationLibrary_djhkt")
-autoplay = &"new_animation"
-
 [node name="anim_players" type="Node" parent="." unique_id=1955286991]
 
-[node name="musicsync" type="AnimationPlayer" parent="anim_players" unique_id=709071572]
+[node name="floorplayer" type="AnimationPlayer" parent="anim_players" unique_id=1440524040]
 root_node = NodePath("../..")
+libraries/ = SubResource("AnimationLibrary_geflf")
+autoplay = &"new_animation"
+
+[node name="musicsync" type="AnimationPlayer" parent="anim_players" unique_id=709071572]
 libraries/ = SubResource("AnimationLibrary_5rjsf")
 autoplay = &"hi"
 
-[node name="anim_players2" type="Node" parent="anim_players" unique_id=1495927826]
+[node name="tableplayer" type="AnimationPlayer" parent="anim_players" unique_id=43732874]
+root_node = NodePath("../../PoolTable")
+libraries/ = SubResource("AnimationLibrary_djhkt")
+autoplay = &"new_animation"
 
 [connection signal="toggled" from="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer/VRMode" to="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer/VRMode" method="_on_toggled"]
 [connection signal="toggled" from="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer2/MouseMOde" to="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer2/MouseMOde" method="_on_toggled"]
