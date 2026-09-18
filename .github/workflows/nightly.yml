@@ -203,37 +203,37 @@ jobs:
             | sort \
             | head -30
 
-      #- name: Install Godot export templates
-      #  shell: bash
-#        run: |
- #         set -euxo pipefail
-#
- #         mkdir -p "$HOME/.local/share/godot/export_templates"
-  #    
-   #       cp -a \
-    #        "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-     #       "$HOME/.local/share/godot/export_templates/"
-      
       - name: Install Godot export templates
         shell: bash
         run: |
           set -euxo pipefail
+
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+     
+          cp -a \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/"
       
-          VERSION="4.7.2"
-          FLAVOR="stable"
-          DEST="$HOME/.local/share/godot/export_templates/${VERSION}.${FLAVOR}"
-          URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOR}&slug=export_templates.tpz&platform=templates"
+#      - name: Install Godot export templates
+#        shell: bash
+#        run: |
+#          set -euxo pipefail
       
-          mkdir -p "$DEST"
-          curl -fL "$URL" -o /tmp/godot-templates.tpz
-          unzip -q /tmp/godot-templates.tpz -d "$DEST"
+#          VERSION="4.7.2"
+#          FLAVOR="stable"
+#          DEST="$HOME/.local/share/godot/export_templates/${VERSION}.${FLAVOR}"
+#          URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOR}&slug=export_templates.tpz&platform=templates"
       
-          if [ -d "$DEST/templates" ]; then
-            mv "$DEST/templates/"* "$DEST/"
-            rmdir "$DEST/templates"
-          fi
+ #         mkdir -p "$DEST"
+ #         curl -fL "$URL" -o /tmp/godot-templates.tpz
+ #         unzip -q /tmp/godot-templates.tpz -d "$DEST"
+      
+  #        if [ -d "$DEST/templates" ]; then
+ #           mv "$DEST/templates/"* "$DEST/"
+  #          rmdir "$DEST/templates"
+ #         fi
     
-          test -f "$DEST/android_source.zip"
+  #        test -f "$DEST/android_source.zip"
       
       - name: Verify Android environment
         if: matrix.android == 'true'
@@ -265,6 +265,7 @@ jobs:
               --path "$PROJECT_PATH" \
               --verbose \
               --export-debug \
+              --install-android-build-template
               "${{ matrix.preset }}" \
               "${{ matrix.output }}"
           else
