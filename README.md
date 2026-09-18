@@ -7,6 +7,7 @@
 ![Arduino IDE](https://img.shields.io/badge/Arduino%20IDE-%2300979D.svg?style=for-the-badge&logo=Arduino&logoColor=white)
 ![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white)
 ![GDScript](https://img.shields.io/badge/GDScript-%2374267B.svg?style=for-the-badge&logo=godotengine&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 [![godot-ci export](https://github.com/ValeraDX/scary-horror-game/actions/workflows/nightly.yml/badge.svg)](https://github.com/ValeraDX/scary-horror-game/actions/workflows/nightly.yml)
 
 The scariest game ever about a pool table. Built with Godot 4.4.
