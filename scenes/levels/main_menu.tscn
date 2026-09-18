@@ -15,9 +15,7 @@
 [ext_resource type="Animation" uid="uid://cefvay0qxo75b" path="res://scenes/player/model/anims/basic/injured_fall.res" id="8_wgqco"]
 [ext_resource type="Animation" uid="uid://c1s3yn7ikf0qw" path="res://scenes/player/model/anims/basic/injured_run_land.res" id="9_7gp8n"]
 [ext_resource type="Animation" uid="uid://dnkyfeddl3l7f" path="res://scenes/player/model/anims/basic/unarmed_walk_forward.res" id="10_gdcvq"]
-[ext_resource type="Script" uid="uid://bt4o47ovl3ptn" path="res://scenes/levels/mainmenu/floorappear.gd" id="11_pwqr4"]
 [ext_resource type="ArrayMesh" uid="uid://e23ewv3rk27f" path="res://objects/table de killer/model/POOL TABLE.obj" id="12_gdcvq"]
-[ext_resource type="Script" uid="uid://dpwrjtgb3152w" path="res://scenes/levels/textedittimer.gd" id="12_y2ttv"]
 [ext_resource type="Texture2D" uid="uid://dcx6emjxnqj0p" path="res://objects/pool table low_POOL TABLE_Normal.png" id="13_y2ttv"]
 [ext_resource type="Texture2D" uid="uid://bor8exkg675ry" path="res://objects/table de killer/model/pool table low_POOL TABLE_Metallic.png" id="14_djhkt"]
 [ext_resource type="Texture2D" uid="uid://7p8e2gga8uyo" path="res://objects/table de killer/model/pool table low_POOL TABLE_BaseColor.png" id="15_p8l7r"]
@@ -446,6 +444,139 @@ _data = {
 &"new_animation": SubResource("Animation_y2ttv")
 }
 
+[sub_resource type="Animation" id="Animation_g5b8e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../floor:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../guy:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../PoolTable:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Control/Label:text")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [""]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../Control/menu:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_tl0ru"]
+resource_name = "hi"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../floor:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.75),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../guy:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../PoolTable:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Control/Label:text")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 6, 6.5, 7, 7.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": ["", "[color=red] SCARIEST[color=white]", "[color=red] SCARIEST [tornado freq=8 radius=20]GAME[/tornado]", "[color=red] SCARIEST[color=white] [tornado freq=8 radius=20]GAME[/tornado] IN", "[color=red] SCARIEST[color=white] [tornado freq=8 radius=20]GAME[/tornado] IN DECADES"]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../Control/menu:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 7.62),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5rjsf"]
+_data = {
+&"RESET": SubResource("Animation_g5b8e"),
+&"hi": SubResource("Animation_tl0ru")
+}
+
 [node name="MainMenu" type="Node3D" unique_id=605835835]
 
 [node name="Control" type="Control" parent="." unique_id=1444139280]
@@ -822,68 +953,6 @@ libraries/ = SubResource("AnimationLibrary_p8l7r")
 autoplay = &"walk"
 playback_default_blend_time = 0.5
 
-[node name="timers" type="Node" parent="." unique_id=1036183653]
-
-[node name="floorappear" type="Timer" parent="timers" unique_id=1623193936 node_paths=PackedStringArray("node_floor")]
-wait_time = 1.75
-one_shot = true
-autostart = true
-script = ExtResource("11_pwqr4")
-node_floor = NodePath("../../floor")
-
-[node name="floorappear2" type="Timer" parent="timers" unique_id=826373137 node_paths=PackedStringArray("node_floor")]
-wait_time = 3.9
-one_shot = true
-autostart = true
-script = ExtResource("11_pwqr4")
-node_floor = NodePath("../../guy")
-
-[node name="floorappear3" type="Timer" parent="timers" unique_id=403856861 node_paths=PackedStringArray("node_floor")]
-wait_time = 6.0
-one_shot = true
-autostart = true
-script = ExtResource("11_pwqr4")
-node_floor = NodePath("../../PoolTable")
-
-[node name="floorappear4" type="Timer" parent="timers" unique_id=837555503 node_paths=PackedStringArray("label")]
-wait_time = 6.0
-one_shot = true
-autostart = true
-script = ExtResource("12_y2ttv")
-label = NodePath("../../Control/Label")
-txt = "[color=red] SCARIEST[color=white]"
-
-[node name="floorappear5" type="Timer" parent="timers" unique_id=475550161 node_paths=PackedStringArray("label")]
-wait_time = 6.5
-one_shot = true
-autostart = true
-script = ExtResource("12_y2ttv")
-label = NodePath("../../Control/Label")
-txt = "[color=red] SCARIEST [tornado freq=8 radius=20]GAME[/tornado]"
-
-[node name="floorappear6" type="Timer" parent="timers" unique_id=331888114 node_paths=PackedStringArray("label")]
-wait_time = 7.0
-one_shot = true
-autostart = true
-script = ExtResource("12_y2ttv")
-label = NodePath("../../Control/Label")
-txt = "[color=red] SCARIEST[color=white] [tornado freq=8 radius=20]GAME[/tornado] IN"
-
-[node name="floorappear7" type="Timer" parent="timers" unique_id=1927012970 node_paths=PackedStringArray("label")]
-wait_time = 7.5
-one_shot = true
-autostart = true
-script = ExtResource("12_y2ttv")
-label = NodePath("../../Control/Label")
-txt = "[color=red] SCARIEST[color=white] [tornado freq=8 radius=20]GAME[/tornado] IN DECADES"
-
-[node name="floorappear8" type="Timer" parent="timers" unique_id=1672047 node_paths=PackedStringArray("node_floor")]
-wait_time = 8.0
-one_shot = true
-autostart = true
-script = ExtResource("11_pwqr4")
-node_floor = NodePath("../../Control/menu")
-
 [node name="PoolTable" type="MeshInstance3D" parent="." unique_id=1358202431]
 transform = Transform3D(1.7135152, 0, -0.07135488, 0, 1.7150003, 0, 0.07135488, 0, 1.7135152, -8.594822, 0.557863, -1.1760476)
 visible = false
@@ -904,17 +973,18 @@ surface_material_override/10 = SubResource("StandardMaterial3D_qxdew")
 libraries/ = SubResource("AnimationLibrary_djhkt")
 autoplay = &"new_animation"
 
+[node name="anim_players" type="Node" parent="." unique_id=1955286991]
+
+[node name="musicsync" type="AnimationPlayer" parent="anim_players" unique_id=709071572]
+root_node = NodePath("../..")
+libraries/ = SubResource("AnimationLibrary_5rjsf")
+autoplay = &"hi"
+
+[node name="anim_players2" type="Node" parent="anim_players" unique_id=1495927826]
+
 [connection signal="toggled" from="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer/VRMode" to="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer/VRMode" method="_on_toggled"]
 [connection signal="toggled" from="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer2/MouseMOde" to="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer2/MouseMOde" method="_on_toggled"]
 [connection signal="toggled" from="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer3/touch" to="Control/menu/HBoxContainer/SettingsPane/VBoxContainer/MarginContainer3/touch" method="_on_toggled"]
 [connection signal="pressed" from="Control/menu/HBoxContainer/GamePane/VBoxContainer/btn_play" to="Control/menu/HBoxContainer/GamePane/VBoxContainer/btn_play" method="_on_pressed"]
 [connection signal="pressed" from="Control/menu/HBoxContainer/GamePane/VBoxContainer/btn_play2" to="Control/menu/HBoxContainer/GamePane/VBoxContainer/btn_play2" method="_on_pressed"]
 [connection signal="pressed" from="Control/menu/HBoxContainer/GamePane/VBoxContainer/btn_exit" to="Control/menu/HBoxContainer/GamePane/VBoxContainer/btn_exit" method="_on_pressed"]
-[connection signal="timeout" from="timers/floorappear" to="timers/floorappear" method="_on_timeout"]
-[connection signal="timeout" from="timers/floorappear2" to="timers/floorappear2" method="_on_timeout"]
-[connection signal="timeout" from="timers/floorappear3" to="timers/floorappear3" method="_on_timeout"]
-[connection signal="timeout" from="timers/floorappear4" to="timers/floorappear4" method="_on_timeout"]
-[connection signal="timeout" from="timers/floorappear5" to="timers/floorappear5" method="_on_timeout"]
-[connection signal="timeout" from="timers/floorappear6" to="timers/floorappear6" method="_on_timeout"]
-[connection signal="timeout" from="timers/floorappear7" to="timers/floorappear7" method="_on_timeout"]
-[connection signal="timeout" from="timers/floorappear8" to="timers/floorappear8" method="_on_timeout"]

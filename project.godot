@@ -26,6 +26,7 @@ Gameplatform="*res://scripts/gameplatform.gd"
 [display]
 
 window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_width"
 
 [dotnet]
 
