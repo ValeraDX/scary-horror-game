@@ -91,11 +91,7 @@ func generickill() -> void:
 	$Aaaaaaaaaaaaaa.play()
 	$CanvasLayer/AnimationPlayer.play("dead")
 	if hardmode:
-		var p : Timer = Timer.new()
-		p.autostart = false
-		p.one_shot = true
-		p.start(2)
-		await p.is_stopped()
+		await get_tree().create_timer(2).timeout
 		get_tree().reload_current_scene()
 
 
