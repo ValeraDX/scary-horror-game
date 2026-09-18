@@ -580,7 +580,7 @@ bone_idx = 5
 transform = Transform3D(1, 2.21189e-08, -3.72529e-09, -4.65661e-10, 1, -2.98023e-08, -4.65661e-09, 2.98023e-08, 1, 1.42569, 10.3182, 13.1156)
 
 [node name="Camera3D" type="Camera3D" parent="Skeleton/BoneAttachment3D/Head" unique_id=1415614315]
-transform = Transform3D(-39.84779, -0.43693992, -3.4587357, 0, 39.68459, -5.0133295, 3.4862256, -4.994252, -39.533577, -0.27459598, -2.0177765, -5.5229187)
+transform = Transform3D(-39.847786, -0.43694097, -3.4587324, -1.4901161e-08, 39.684586, -5.0133276, 3.486222, -4.994249, -39.53357, -0.9000393, 7.355606, 0.960762)
 fov = 60.19741
 
 [node name="FatGuy" type="MeshInstance3D" parent="Skeleton" unique_id=1496194210]
