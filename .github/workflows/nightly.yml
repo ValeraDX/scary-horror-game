@@ -203,16 +203,16 @@ jobs:
             | sort \
             | head -30
 
-      - name: Install Godot export templates
-        shell: bash
-        run: |
-          set -euxo pipefail
-
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-      
-          cp -a \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/"
+      #- name: Install Godot export templates
+      #  shell: bash
+#        run: |
+ #         set -euxo pipefail
+#
+ #         mkdir -p "$HOME/.local/share/godot/export_templates"
+  #    
+   #       cp -a \
+    #        "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+     #       "$HOME/.local/share/godot/export_templates/"
       
       - name: Install Godot export templates
         shell: bash
@@ -220,21 +220,20 @@ jobs:
           set -euxo pipefail
       
           VERSION="4.7.2"
-          DEST="$HOME/.local/share/godot/export_templates/${VERSION}.stable.mono"
-          ZIP_URL="https://downloads.tuxfamily.org/godotengine/${VERSION}/Godot_v${VERSION}-stable_mono_export_templates.tpz"
+          FLAVOR="stable"
+          DEST="$HOME/.local/share/godot/export_templates/${VERSION}.${FLAVOR}.mono"
+          URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOR}&slug=mono_export_templates.tpz&platform=templates"
       
           mkdir -p "$DEST"
-          curl -fL "$ZIP_URL" -o /tmp/godot-templates.tpz
+          curl -fL "$URL" -o /tmp/godot-templates.tpz
           unzip -q /tmp/godot-templates.tpz -d "$DEST"
       
-          # If the archive unpacks as DEST/templates/..., flatten it:
           if [ -d "$DEST/templates" ]; then
             mv "$DEST/templates/"* "$DEST/"
             rmdir "$DEST/templates"
           fi
-      
+    
           test -f "$DEST/android_source.zip"
-
       
       - name: Verify Android environment
         if: matrix.android == 'true'
