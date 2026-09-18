@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cbbk18bqqn74o" path="res://objects/checkers.png" id="2_yp2xm"]
 [ext_resource type="PackedScene" uid="uid://b4h8d4eln1vke" path="res://objects/table de killer/scarymonter.tscn" id="3_yp2xm"]
 [ext_resource type="PackedScene" uid="uid://b4bvrujie24ek" path="res://objects/poshalko.tscn" id="4_uyl1e"]
+[ext_resource type="Texture2D" uid="uid://c3c8cgi5mqohn" path="res://textures/Halloween_Creepy_Witch_PNG_Clipart.png" id="5_7115g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uyl1e"]
 albedo_texture = ExtResource("2_yp2xm")
@@ -165,6 +166,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.4013, 1.64017, -17.7316)
 
 [node name="poshalko3" parent="." unique_id=1375530564 instance=ExtResource("4_uyl1e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7061, 2.18211, 27.1547)
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=78655507]
+transform = Transform3D(0.15786508, 0, 0.08647899, 0, 0.18000002, 0, -0.08647899, 0, 0.15786508, -7.598842, 2.757096, 6.314784)
+billboard = 1
+texture = ExtResource("5_7115g")
 
 [connection signal="kill" from="scarymonter" to="player" method="_on_scarymonter_kill"]
 [connection signal="collected" from="poshalko5" to="player" method="_on_poshalko_collected"]
