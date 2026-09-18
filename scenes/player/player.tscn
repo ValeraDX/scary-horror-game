@@ -643,17 +643,21 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = 568.0
-offset_right = 40.0
-offset_bottom = 608.0
+offset_left = -847.7756
+offset_top = 4459.437
+offset_right = -503.7757
+offset_bottom = 4735.433
 grow_vertical = 0
 offset_transform_enabled = true
-offset_transform_position_ratio = Vector2(1.58, -16.845)
+offset_transform_position_ratio = Vector2(2.479, -17.154)
 offset_transform_visual_only = false
+joystick_mode = 1
+joystick_size = 142.0
 action_left = &"left"
 action_right = &"right"
 action_up = &"up"
 action_down = &"down"
+visibility_mode = 1
 
 [node name="MultiTouchButton" type="Button" parent="CanvasLayer/Control/Control" unique_id=1576737941]
 layout_mode = 1

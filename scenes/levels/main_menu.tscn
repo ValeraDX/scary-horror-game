@@ -449,12 +449,15 @@ _data = {
 [node name="MainMenu" type="Node3D" unique_id=605835835]
 
 [node name="Control" type="Control" parent="." unique_id=1444139280]
+propagate_maximum_size = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Label" type="RichTextLabel" parent="Control" unique_id=1719823854]
 clip_contents = false
@@ -478,6 +481,7 @@ visible_characters_behavior = 1
 
 [node name="menu" type="Control" parent="Control" unique_id=1714690044]
 visible = false
+propagate_maximum_size = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -514,6 +518,7 @@ layout_mode = 2
 offset_transform_enabled = true
 offset_transform_position_ratio = Vector2(-0.545, 0)
 offset_transform_scale = Vector2(2, 2)
+offset_transform_visual_only = false
 text = "Enable VR mode"
 alignment = 2
 script = ExtResource("1_g5b8e")
@@ -529,6 +534,7 @@ layout_mode = 2
 offset_transform_enabled = true
 offset_transform_position_ratio = Vector2(-0.545, 0)
 offset_transform_scale = Vector2(2, 2)
+offset_transform_visual_only = false
 text = "Use mouse for moving camera"
 alignment = 2
 script = ExtResource("1_g5b8e")
@@ -544,6 +550,7 @@ layout_mode = 2
 offset_transform_enabled = true
 offset_transform_position_ratio = Vector2(-0.545, 0)
 offset_transform_scale = Vector2(2, 2)
+offset_transform_visual_only = false
 text = "Enable touch controls"
 alignment = 2
 script = ExtResource("1_g5b8e")

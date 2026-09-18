@@ -23,6 +23,10 @@ config/icon="res://icon.svg"
 
 Gameplatform="*res://scripts/gameplatform.gd"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [dotnet]
 
 project/assembly_name="scary horror"
