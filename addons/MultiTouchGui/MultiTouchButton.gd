@@ -5,7 +5,7 @@ class_name MultiTouchButton
 func _gui_input(event):
 	var event_pos_adjusted : Vector2
 	var inside : bool
-	if event.get("position"):
+	if event.get(&"position"):
 		event_pos_adjusted = event.position + global_position
 		inside = event_pos_adjusted.x > position.x and event_pos_adjusted.y > position.y and event_pos_adjusted.x < position.x + size.x and event_pos_adjusted.y < position.y + size.y
 	
