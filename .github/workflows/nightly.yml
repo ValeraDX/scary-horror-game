@@ -79,11 +79,12 @@ jobs:
             curl \
             unzip \
             ca-certificates \
+            fastfetch \
             openjdk-17-jdk
 
           mkdir -p "$BLENDER_USER_CONFIG"
           mkdir -p "$BLENDER_USER_CACHE"
-
+          fastfetch
           blender --background --version
           test -x /usr/bin/blender
 
