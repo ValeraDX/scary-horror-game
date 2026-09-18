@@ -160,6 +160,16 @@ jobs:
           cp -a \
             "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/"
+      - name: Install Android build template
+        if: matrix.android == 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          godot \
+            --headless \
+            --path "$PROJECT_PATH" \
+            --install-android-build-template
           
 
       - name: Configure Godot
