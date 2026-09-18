@@ -219,21 +219,9 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-
-          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          SOURCE_ZIP="$TEMPLATE_DIR/templates/android_source.zip"
-
-          test -f "$SOURCE_ZIP"
-
-          rm -rf "$PROJECT_PATH/android"
-          mkdir -p "$PROJECT_PATH/android"
-
-          unzip -q "$SOURCE_ZIP" -d "$PROJECT_PATH/android"
-
-          echo "Installed Android template:"
-          find "$PROJECT_PATH/android" -maxdepth 3 -type f | sort | head -50
-
-          test -d "$PROJECT_PATH/android/build"
+          mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          cp -a /usr/local/share/godot/export_templates/${GODOT_VERSION}.stable/* \
+          "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
 
       
       - name: Verify Android environment
