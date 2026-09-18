@@ -150,39 +150,6 @@ jobs:
           mkdir -p "$BLENDER_USER_CONFIG"
           mkdir -p "$BLENDER_USER_CACHE"
           mkdir -p "$HOME/.config/godot"
-        
-      - name: Import Godot project
-        shell: bash
-        run: |
-          set -euxo pipefail
-
-          godot \
-            --headless \
-            --editor \
-            --path "$PROJECT_PATH" \
-            --import \
-            --quit
-      - name: Install Godot export templates
-        shell: bash
-        run: |
-          set -euxo pipefail
-
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-      
-          cp -a \
-            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/"
-      - name: Install Android build template
-        if: matrix.android == 'true'
-        shell: bash
-        run: |
-          set -euxo pipefail
-
-          godot \
-            --headless \
-            --path "$PROJECT_PATH" \
-            --install-android-build-template
-          
 
       - name: Configure Godot
         shell: bash
@@ -214,6 +181,41 @@ jobs:
           filesystem/import/blender/rpc_port = 0
           EOF
           fi
+        
+      - name: Import Godot project
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          godot \
+            --headless \
+            --editor \
+            --path "$PROJECT_PATH" \
+            --import \
+            --quit
+      
+      - name: Install Godot export templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+      
+          cp -a \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+            "$HOME/.local/share/godot/export_templates/"
+      
+      - name: Install Android build template
+        if: matrix.android == 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          godot \
+            --headless \
+            --path "$PROJECT_PATH" \
+            --install-android-build-template
+          
 
       - name: Verify Android environment
         if: matrix.android == 'true'
