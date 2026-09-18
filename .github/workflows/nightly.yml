@@ -221,8 +221,8 @@ jobs:
       
           VERSION="4.7.2"
           FLAVOR="stable"
-          DEST="$HOME/.local/share/godot/export_templates/${VERSION}.${FLAVOR}.mono"
-          URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOR}&slug=mono_export_templates.tpz&platform=templates"
+          DEST="$HOME/.local/share/godot/export_templates/${VERSION}.${FLAVOR}"
+          URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOR}&slug=export_templates.tpz&platform=templates"
       
           mkdir -p "$DEST"
           curl -fL "$URL" -o /tmp/godot-templates.tpz
