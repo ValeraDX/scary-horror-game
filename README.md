@@ -19,7 +19,9 @@
 The scariest game ever about a pool table. Originally built with Godot 4.4, updated to Godot 4.7.2.
 Pull requests are welcome, but I don't think anyone would ever do that.
 
+
 Get the game [here](https://gamejolt.com/games/SUPERSCARYURL/990599)
+
 Want to test unreleased changes? Get the latest successful builds of the master branch [here](https://nightly.link/ValeraDX/scary-horror-game/workflows/nightly/main?preview)
 
 
