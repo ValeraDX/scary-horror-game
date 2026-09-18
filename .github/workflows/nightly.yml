@@ -4,335 +4,239 @@ on:
   push:
 
 env:
-  GODOT_VERSION: 4.7.2
-  PROJECT_PATH: .
+  GODOT_VERSION: "4.7.2"
+  PROJECT_PATH: "."
 
 jobs:
-  export-windows-32:
+  export:
     runs-on: ubuntu-26.04
+
     container:
       image: barichello/godot-ci:4.7.2
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-32
+            preset: "Windows 32 Bit"
+            output: "build/win32/scary horror-win32.exe"
+            artifact: windows-32
+            android: "false"
+
+          - name: windows-64
+            preset: "Windows 64 Bit"
+            output: "build/win64/scary horror-win64.exe"
+            artifact: windows-64
+            android: "false"
+
+          - name: linux-32
+            preset: "Linux 32 Bit"
+            output: "build/linux32/super scary-linux32"
+            artifact: linux-32
+            android: "false"
+
+          - name: linux-64
+            preset: "Linux 64 Bit"
+            output: "build/linux64/scary horror-linux"
+            artifact: linux-64
+            android: "false"
+
+          - name: macos
+            preset: "macOS"
+            output: "build/mac/scary horror-mac.zip"
+            artifact: macos
+            android: "false"
+
+          - name: android
+            preset: "Android"
+            output: "build/android/scary horror-android.apk"
+            artifact: android-debug
+            android: "true"
+
+    name: Export ${{ matrix.name }}
+
+    env:
+      HOME: /root
+      ANDROID_SDK_ROOT: /opt/android-sdk
+      ANDROID_HOME: /opt/android-sdk
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      BLENDER_USER_CONFIG: /root/.config/blender
+      BLENDER_USER_CACHE: /root/.cache/blender
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Blender
+      - name: Install common dependencies
+        shell: bash
         run: |
+          set -euxo pipefail
+
           apt-get update
-          apt-get install -y --no-install-recommends blender
+          apt-get install -y --no-install-recommends \
+            blender \
+            curl \
+            unzip \
+            ca-certificates \
+            openjdk-17-jdk
+
+          mkdir -p "$BLENDER_USER_CONFIG"
+          mkdir -p "$BLENDER_USER_CACHE"
+
           blender --background --version
           test -x /usr/bin/blender
 
-      - name: Configure Godot
+      - name: Install Android SDK
+        if: matrix.android == 'true'
+        shell: bash
         run: |
-          mkdir -p "$HOME/.config/godot"
+          set -euxo pipefail
+
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+
+          curl -fL \
+            "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip" \
+            -o /tmp/android-commandline-tools.zip
+
+          rm -rf /tmp/android-commandline-tools
+          mkdir -p /tmp/android-commandline-tools
+
+          unzip -q \
+            /tmp/android-commandline-tools.zip \
+            -d /tmp/android-commandline-tools
+
+          mv \
+            /tmp/android-commandline-tools/cmdline-tools \
+            "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+
+          yes | sdkmanager \
+            --sdk_root="$ANDROID_SDK_ROOT" \
+            --licenses >/dev/null || true
+
+          sdkmanager \
+            --sdk_root="$ANDROID_SDK_ROOT" \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
+
+      - name: Create Android debug keystore
+        if: matrix.android == 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          mkdir -p "$HOME/.android"
+
+          keytool -genkeypair \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -noprompt
+
+      - name: Install Godot export templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+
           mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+
+          cp -a \
+            "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-      - name: Export
-        run: |
-          mkdir -p build/win32
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
-            --export-release "Windows 32 Bit" "build/win32/scary horror-win32.exe"
-
-      - name: Verify
-        run: |
-          test -f "build/win32/scary horror-win32.exe"
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-32
-          path: build/win32/scary horror-win32.exe
-
-  export-windows-64:
-    runs-on: ubuntu-26.04
-    container:
-      image: barichello/godot-ci:4.7.2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Blender
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends blender
-          blender --background --version
-          test -x /usr/bin/blender
-
-      - name: Configure Godot
-        run: |
-          mkdir -p "$HOME/.config/godot"
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-      - name: Export
-        run: |
-          mkdir -p build/win64
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
-            --export-release "Windows 64 Bit" "build/win64/scary horror-win64.exe"
-
-      - name: Verify
-        run: |
-          test -f "build/win64/scary horror-win64.exe"
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-64
-          path: build/win64/scary horror-win64.exe
-
-  export-linux-32:
-    runs-on: ubuntu-26.04
-    container:
-      image: barichello/godot-ci:4.7.2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Blender
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends blender
-          blender --background --version
-          test -x /usr/bin/blender
 
       - name: Configure Godot
+        shell: bash
         run: |
+          set -euxo pipefail
+
           mkdir -p "$HOME/.config/godot"
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+
+          if [ "${{ matrix.android }}" = "true" ]; then
+            cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-      - name: Export
-        run: |
-          mkdir -p build/linux32
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
-            --export-release "Linux 32 Bit" "build/linux32/super scary-linux32"
-
-      - name: Verify
-        run: |
-          test -f "build/linux32/super scary-linux32"
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-32
-          path: build/linux32/super scary-linux32
-
-  export-linux-64:
-    runs-on: ubuntu-26.04
-    container:
-      image: barichello/godot-ci:4.7.2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Blender
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends blender
-          blender --background --version
-          test -x /usr/bin/blender
-
-      - name: Configure Godot
-        run: |
-          mkdir -p "$HOME/.config/godot"
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-      - name: Export
-        run: |
-          mkdir -p build/linux64
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
-            --export-release "Linux 64 Bit" "build/linux64/scary horror-linux"
-
-      - name: Verify
-        run: |
-          test -f "build/linux64/scary horror-linux"
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-64
-          path: build/linux64/scary horror-linux
-
-  export-mac:
-    runs-on: ubuntu-26.04
-    container:
-      image: barichello/godot-ci:4.7.2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Blender
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends blender
-          blender --background --version
-          test -x /usr/bin/blender
-
-      - name: Configure Godot
-        run: |
-          mkdir -p "$HOME/.config/godot"
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-
-      - name: Export
-        run: |
-          mkdir -p build/mac
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
-            --export-release "macOS" "build/mac/scary horror-mac.zip"
-
-      - name: Verify
-        run: |
-          test -f "build/mac/scary horror-mac.zip"
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos
-          path: build/mac/scary horror-mac.zip
-
-  export-android:
-    runs-on: ubuntu-26.04
-    container:
-      image: barichello/godot-ci:4.7.2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Blender
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends blender
-          blender --background --version
-          test -x /usr/bin/blender
-
-      - name: Configure Godot
-        run: |
-          mkdir -p "$HOME/.config/godot"
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          cp -a "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
-
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
-          export/android/android_sdk_path = "/usr/lib/android-sdk"
-          export/android/debug_keystore = "/root/debug.keystore"
+          filesystem/import/blender/rpc_port = 0
+          export/android/java_sdk_path = "${JAVA_HOME}"
+          export/android/android_sdk_path = "${ANDROID_SDK_ROOT}"
+          export/android/debug_keystore = "${HOME}/.android/debug.keystore"
           export/android/debug_keystore_user = "androiddebugkey"
           export/android/debug_keystore_pass = "android"
           export/android/force_system_user = false
           EOF
+          else
+            cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
 
-      - name: Verify Android SDK
+          [resource]
+          filesystem/import/blender/blender_path = "/usr/bin/blender"
+          filesystem/import/blender/rpc_port = 0
+          EOF
+          fi
+
+      - name: Verify Android environment
+        if: matrix.android == 'true'
+        shell: bash
         run: |
-          test -d /usr/lib/android-sdk
-          test -x /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager
-          test -d /usr/lib/android-sdk/platform-tools
-          test -d /usr/lib/android-sdk/platforms/android-34
-          test -d /usr/lib/android-sdk/build-tools/34.0.0
-          test -d /usr/lib/jvm/java-17-openjdk-amd64
-          test -f /root/debug.keystore
+          set -euxo pipefail
+
+          test -x "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          test -d "$ANDROID_SDK_ROOT/platform-tools"
+          test -d "$ANDROID_SDK_ROOT/platforms/android-34"
+          test -d "$ANDROID_SDK_ROOT/build-tools/34.0.0"
+          test -d "$JAVA_HOME"
+          test -f "$HOME/.android/debug.keystore"
+
           java -version
-          /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager --version
-
-      - name: Verify Android assets
-        run: |
-          find "$PROJECT_PATH" -type f \( -iname "*.ogg" -o -iname "*.wav" -o -iname "*.mp3" \) | head -50
-          find "$PROJECT_PATH" -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" \) | head -50
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --version
 
       - name: Export
+        shell: bash
         run: |
-          mkdir -p build/android
-          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
-          [gd_resource type="EditorSettings" format=3]
+          set -euxo pipefail
 
-          [resource]
-          filesystem/import/blender/blender_path = "/usr/bin/blender"
-          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
-          export/android/android_sdk_path = "/usr/lib/android-sdk"
-          export/android/debug_keystore = "/root/debug.keystore"
-          export/android/debug_keystore_user = "androiddebugkey"
-          export/android/debug_keystore_pass = "android"
-          export/android/force_system_user = false
-          EOF
-          godot --headless --audio-driver Dummy --path "$PROJECT_PATH" --verbose \
-            --export-debug "Android" "build/android/scary horror-android.apk"
+          mkdir -p "$(dirname "${{ matrix.output }}")"
 
-      - name: Verify
+          if [ "${{ matrix.android }}" = "true" ]; then
+            godot \
+              --headless \
+              --audio-driver Dummy \
+              --path "$PROJECT_PATH" \
+              --verbose \
+              --export-debug \
+              "${{ matrix.preset }}" \
+              "${{ matrix.output }}"
+          else
+            godot \
+              --headless \
+              --audio-driver Dummy \
+              --path "$PROJECT_PATH" \
+              --verbose \
+              --export-release \
+              "${{ matrix.preset }}" \
+              "${{ matrix.output }}"
+          fi
+
+      - name: Verify export
+        shell: bash
         run: |
-          test -f "build/android/scary horror-android.apk"
+          set -euxo pipefail
 
-      - name: Upload
+          test -f "${{ matrix.output }}"
+          test -s "${{ matrix.output }}"
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-debug
-          path: build/android/scary horror-android.apk
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.output }}
+          if-no-files-found: error
