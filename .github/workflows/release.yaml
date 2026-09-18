@@ -1,12 +1,8 @@
-name: "godot-ci release"
+name: "godot-ci export"
 
 on:
   push:
-    tags:
-      - "v*"
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 env:
   GODOT_VERSION: "4.7.2"
@@ -84,8 +80,10 @@ jobs:
             unzip \
             ca-certificates \
             openjdk-17-jdk
+
           mkdir -p "$BLENDER_USER_CONFIG"
           mkdir -p "$BLENDER_USER_CACHE"
+
           blender --background --version
           test -x /usr/bin/blender
 
@@ -94,22 +92,30 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
+
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+
           curl -fL \
             "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip" \
             -o /tmp/android-commandline-tools.zip
+
           rm -rf /tmp/android-commandline-tools
           mkdir -p /tmp/android-commandline-tools
+
           unzip -q \
             /tmp/android-commandline-tools.zip \
             -d /tmp/android-commandline-tools
+
           mv \
             /tmp/android-commandline-tools/cmdline-tools \
             "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+
           export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+
           yes | sdkmanager \
             --sdk_root="$ANDROID_SDK_ROOT" \
             --licenses >/dev/null || true
+
           sdkmanager \
             --sdk_root="$ANDROID_SDK_ROOT" \
             "platform-tools" \
@@ -122,6 +128,7 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p "$HOME/.android"
+
           keytool -genkeypair \
             -keystore "$HOME/.android/debug.keystore" \
             -storepass android \
@@ -146,7 +153,6 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          mkdir -p "$HOME/.config/godot"
 
           if [ "${{ matrix.android }}" = "true" ]; then
             cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
@@ -178,16 +184,15 @@ jobs:
           set -euxo pipefail
           rm -rf "$PROJECT_PATH/.godot"
           mkdir -p "$PROJECT_PATH/.godot"
+
           timeout 600s godot \
             --headless \
             --editor \
             --path "$PROJECT_PATH" \
             --verbose \
             --quit-after 120
+
           test -d "$PROJECT_PATH/.godot/imported"
-          find "$PROJECT_PATH/.godot/imported" -maxdepth 1 -type f \
-            | sort \
-            | head -30
 
       - name: Install Godot export templates
         shell: bash
@@ -209,14 +214,13 @@ jobs:
           test -d "$ANDROID_SDK_ROOT/build-tools/34.0.0"
           test -d "$JAVA_HOME"
           test -f "$HOME/.android/debug.keystore"
-          java -version
-          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --version
 
       - name: Export
         shell: bash
         run: |
           set -euxo pipefail
           mkdir -p "$(dirname "${{ matrix.output }}")"
+
           if [ "${{ matrix.android }}" = "true" ]; then
             godot \
               --headless \
@@ -253,36 +257,26 @@ jobs:
           if-no-files-found: error
 
   release:
+    name: Publish Release
     needs: export
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
+    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
-
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: dist
 
-      - name: Rename files for release
+      - name: Flatten assets
         shell: bash
         run: |
           set -euxo pipefail
           mkdir -p release-assets
+          find dist -type f -exec cp {} release-assets/ \;
 
-          find dist -type f | while read -r file; do
-            base="$(basename "$file")"
-            case "$base" in
-              *.exe) cp "$file" "release-assets/$base" ;;
-              *.zip) cp "$file" "release-assets/$base" ;;
-              *.apk) cp "$file" "release-assets/$base" ;;
-              *) cp "$file" "release-assets/$base" ;;
-            esac
-          done
-
-          ls -lah release-assets
-
-      - name: Create release
+      - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
