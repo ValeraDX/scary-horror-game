@@ -12,8 +12,8 @@ dest_files=["res://.godot/imported/pinuxmode.ogg-5d2609109c47d3081912b8961688fa6
 
 [params]
 
-loop=false
-loop_offset=0
-bpm=0
-beat_count=0
+loop=true
+loop_offset=0.0
+bpm=120.0
+beat_count=421
 bar_beats=4

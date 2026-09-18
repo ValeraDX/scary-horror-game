@@ -9,6 +9,8 @@ var gamepadinput : Vector2
 @export var vrcamera : XRCamera3D
 @export var joystick : VirtualJoystick
 @onready var enemy = get_parent().get_node("scarymonter")
+@export var hardmode : bool = false
+
 func _ready() -> void:
 	vrcamera.current = Gameplatform.vr
 	normalcamera.current = not Gameplatform.vr
@@ -40,11 +42,19 @@ func _physics_process(delta: float) -> void:
 		input_dir = %left_hand.get_vector2("primary")
 	else:
 		input_dir = Input.get_vector("left", "right", "down", "up")
+	if hardmode: input_dir.y = 1
 	var direction := (transform.basis * Vector3(input_dir.x, 0, -input_dir.y)).normalized()
 	if direction and posh < 6:
 		$AnimationPlayer.play("walk", -1, 1.3)
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+		
+		if hardmode:
+			var normal : Vector3
+			if is_on_floor(): normal = get_floor_normal()
+			normal.y = -normal.y
+			velocity += normal * 0.4
+			velocity += normal * 2
 	else:
 		if posh < 6:
 			$AnimationPlayer.play("idle")
@@ -80,13 +90,20 @@ func _input(event):
 func generickill() -> void:
 	$Aaaaaaaaaaaaaa.play()
 	$CanvasLayer/AnimationPlayer.play("dead")
-	print("damn")
+	if hardmode:
+		var p : Timer = Timer.new()
+		p.autostart = false
+		p.one_shot = true
+		p.start(2)
+		await p.is_stopped()
+		get_tree().reload_current_scene()
 
 
 func _on_scarymonter_kill(_cause: Variant) -> void:
 	if posh < 6:
 		generickill()
 	
+
 
 
 func _on_poshalko_collected() -> void:

@@ -6,11 +6,11 @@
 [ext_resource type="Script" uid="uid://bq63ghb2echld" path="res://scenes/levels/mainmenu/main_menu.gd" id="1_w62eu"]
 [ext_resource type="AudioStream" uid="uid://bihxggmxsuigo" path="res://music/NFL Theme Song (HQ).mp3" id="2_leamy"]
 [ext_resource type="PackedScene" uid="uid://t4y60n8nbfok" path="res://scenes/levels/test.tscn" id="2_p8l7r"]
-[ext_resource type="PackedScene" uid="uid://c2lhprnchkg2u" path="res://scenes/player/player.blend" id="3_2arew"]
 [ext_resource type="Texture2D" uid="uid://tepk2cenug6b" path="res://scenes/player/texture.png" id="3_wko7x"]
 [ext_resource type="AudioStream" uid="uid://dmpd78e1wbx0b" path="res://sfx/Creepy Bell Sound Effect - KiiroKarol.ogg" id="4_pwqr4"]
 [ext_resource type="Script" uid="uid://mty8rkvt2oj2" path="res://scenes/levels/mainmenu/btn_exit.gd" id="4_w62eu"]
 [ext_resource type="AudioStream" uid="uid://mhivk8ur8ro4" path="res://sfx/Sonic Rush E3 Beta  Title.ogg" id="5_ohdsy"]
+[ext_resource type="PackedScene" uid="uid://iaxc4f06bd1f" path="res://scenes/levels/hardmode.tscn" id="5_w62eu"]
 [ext_resource type="Animation" uid="uid://501ordqc4kd5" path="res://scenes/player/model/anims/basic/backflip.res" id="6_fwnpy"]
 [ext_resource type="Animation" uid="uid://boajolufrt6ow" path="res://scenes/player/model/anims/basic/fall_b_loop.res" id="7_k0nyb"]
 [ext_resource type="Animation" uid="uid://cefvay0qxo75b" path="res://scenes/player/model/anims/basic/injured_fall.res" id="8_wgqco"]
@@ -716,7 +716,7 @@ size_flags_vertical = 3
 theme_override_font_sizes/font_size = 33
 text = "HARD MODE"
 script = ExtResource("1_djhkt")
-scene = ExtResource("3_2arew")
+scene = ExtResource("5_w62eu")
 
 [node name="btn_exit" type="Button" parent="Control/menu/HBoxContainer/GamePane/VBoxContainer" unique_id=724499517]
 layout_mode = 2
