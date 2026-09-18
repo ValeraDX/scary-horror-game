@@ -15,6 +15,7 @@
 [![Windows](https://badgen.net/badge/icon/windows?icon=windows&label)](https://microsoft.com/windows/)
 [![BitCoin](https://badgen.net/badge/icon/bitcoin?icon=bitcoin&label)](https://bitcoin.org)
 [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/Naereen/badges/)
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/Naereen/ama)
 
 The scariest game ever about a pool table. Originally built with Godot 4.4, updated to Godot 4.7.2.
 Pull requests are welcome, but I don't think anyone would ever do that.
