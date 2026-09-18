@@ -187,12 +187,21 @@ jobs:
         run: |
           set -euxo pipefail
 
-          godot \
+          rm -rf "$PROJECT_PATH/.godot"
+          mkdir -p "$PROJECT_PATH/.godot"
+
+          timeout 600s godot \
             --headless \
             --editor \
             --path "$PROJECT_PATH" \
-            --import \
-            --quit
+            --verbose \
+            --quit-after 120
+
+          test -d "$PROJECT_PATH/.godot/imported"
+
+          find "$PROJECT_PATH/.godot/imported" -maxdepth 1 -type f \
+            | sort \
+            | head -30
       
       - name: Install Godot export templates
         shell: bash
