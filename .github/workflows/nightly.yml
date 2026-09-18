@@ -57,12 +57,12 @@ jobs:
     name: Export ${{ matrix.name }}
 
     env:
-      HOME: /root
+      HOME: /tmp/godot-home
       ANDROID_SDK_ROOT: /opt/android-sdk
       ANDROID_HOME: /opt/android-sdk
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-      BLENDER_USER_CONFIG: /root/.config/blender
-      BLENDER_USER_CACHE: /root/.cache/blender
+      BLENDER_USER_CONFIG: /tmp/godot-home/.config/blender
+      BLENDER_USER_CACHE: /tmp/godot-home/.cache/blender
 
     steps:
       - name: Checkout
@@ -140,29 +140,39 @@ jobs:
             -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US" \
             -noprompt
-
+          
+      - name: Prepare home directory
+        shell: bash
+        run: |
+          set -euxo pipefail
+      
+          mkdir -p "$HOME"
+          mkdir -p "$BLENDER_USER_CONFIG"
+          mkdir -p "$BLENDER_USER_CACHE"
+          mkdir -p "$HOME/.config/godot"
       - name: Install Godot export templates
         shell: bash
         run: |
           set -euxo pipefail
 
           mkdir -p "$HOME/.local/share/godot/export_templates"
-
+      
           cp -a \
             "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
-            "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+            "$HOME/.local/share/godot/export_templates/"
+          
 
       - name: Configure Godot
         shell: bash
         run: |
           set -euxo pipefail
-
+      
           mkdir -p "$HOME/.config/godot"
-
+      
           if [ "${{ matrix.android }}" = "true" ]; then
             cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
-
+      
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           filesystem/import/blender/rpc_port = 0
@@ -176,7 +186,7 @@ jobs:
           else
             cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
-
+      
           [resource]
           filesystem/import/blender/blender_path = "/usr/bin/blender"
           filesystem/import/blender/rpc_port = 0
