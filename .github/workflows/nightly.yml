@@ -264,8 +264,8 @@ jobs:
               --audio-driver Dummy \
               --path "$PROJECT_PATH" \
               --verbose \
+              --install-android-build-template \
               --export-debug \
-              --install-android-build-template
               "${{ matrix.preset }}" \
               "${{ matrix.output }}"
           else
